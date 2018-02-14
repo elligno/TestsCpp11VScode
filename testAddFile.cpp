@@ -8,14 +8,16 @@
 // STL includes
 #include <vector>
 #include <map>
+// test include
+#include "myClass.h"
 
 // Need to find a way to add this file 
-namespace vs1 
+namespace vs11 
 {
     // testing some new features of C++11
     // there is a lot a features which make programming 
     // more enjoyable.
-    void testToAddFile()
+    void testToAddFile( const TestClass& aTestcls)
     {
         std::cout << "Compiling our new added file\n";
 

@@ -1,26 +1,37 @@
 #pragma once
 
-namespace vs1 
-{
-    // This is the bsae class for all tyoe of our testing environment
-    // We are just experienting some OO consepts 
-    class Object  // abstract base class
-    {
-        public:
-        Object()=default;
-        Object(const Object& aOther)=delete;
-        Object& operator= (const Object& aOther)=delete;
+//#include <memory>
+#include <iostream>
+//#include <string>
+//#include <vector>
 
-        virtual bool equals(Object& aOther)=0;
-        virtual bool isAbstract() {return true;}
-    };
-    
-    class myClass : public Object
+namespace vs11 
+{
+    class myClass //: public Object // base object
+                //    public IInterface2Impl // interface 
     {
         public:
         explicit myClass(unsigned aUint);
 
         // services
-        void printSelf();
+        void printSelf() {}
     };
-} // End of namespace
+
+    class TestClass 
+    {
+        public:
+          TestClass();
+          TestClass(int aIntval, float aFloatval);
+          TestClass(const TestClass& aOther);
+          TestClass& operator= (const TestClass& aOther);
+
+          size_t length() const {return m_length;}
+          void resize();
+        private:
+        // set value as default
+        size_t m_length=5;
+        int m_intVal=0;
+        float m_floatVal=0.f;
+        short* m_arrayofShort=nullptr;
+    };
+} 
