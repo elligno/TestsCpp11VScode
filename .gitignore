@@ -1,6 +1,8 @@
 hello.ilk
 hello.pdb
 vc140.pdb
+*.ipch
+*.bin
 
 # Prerequisites
 *.d
@@ -34,3 +36,4 @@ vc140.pdb
 *.exe
 *.out
 *.app
+QuizQuestions/*.png
