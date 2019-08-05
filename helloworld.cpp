@@ -2,12 +2,13 @@
 // C++ includes
 #include <string>
 #include <iostream>
+#include <cstdlib>
+#include <chrono>
 // STL includes
 #include <vector>
 #include <algorithm>
 // boost include
 #include <boost/cast.hpp>
-//#include "C:/Boost/boost_1_60_0/boost/cast.hpp"
 // test include
 #include "Classes/Class2Test.h"
 
@@ -21,6 +22,7 @@ namespace vs11
     void testBase();
     void testMvCall();
     void testInitialization();
+	void stlTest();
 }
 
 	// signature should be char s[]??
@@ -61,6 +63,7 @@ namespace vs11
 		std::cout << "Inverted string is: " << w_teststrInv << "\n";
 	}
 
+
 // =======================================================
 //
 //               Windows main entry point
@@ -69,6 +72,22 @@ namespace vs11
 
 int main()
 {
+	using namespace std;
+
+    std::cout << "Starting tetsing with VSCode, continuing to configure my environment\n";
+
+	// For measuring the execution time of a piece of code, 
+	// we can use the now() function:
+    auto start = chrono::steady_clock::now();
+
+    //
+    //  Insert the code that will be timed
+    //  
+    auto end = chrono::steady_clock::now();
+  
+    // Store the time difference between start and end
+    auto diff = end - start;
+
 	// can now include boost header 
 	const double myDbl=0.3;
 	const int dbl2int = boost::numeric_cast<int>(myDbl);
@@ -86,15 +105,16 @@ int main()
     vs11::testBindMechanism();
     vs11::testBase();
 
-    vs11::StaticVarTest w_checkCall;
+  //  vs11::StaticVarTest w_checkCall;
   //  vs11::StaticVarTest::m_sVar = 2;
 
     std::cout << "Starting debugging with VSCode\n";
 
     // not sure i do understand the difference between them 
-    int ii={}; // what we do exactly? call a ctor? default one
+	// what we should do? new notation or old one?
+    int ii = {}; // what we do exactly? call a ctor? default one
     int jj = int(); // default initialization
-    int kk;
+   // int kk;
 
   //vs1::testingShardPtr();
 //    vs1::testToAddFile();

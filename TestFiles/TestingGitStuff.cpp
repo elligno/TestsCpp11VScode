@@ -11,11 +11,12 @@
 
 namespace vs11 
 {
-    // Some tets usage 
+    // Some test usage 
     // Create a pointer to animal and then pass it to the function
     // after calling the function 
     void testSomeStuff(Animal* aPet)
     {
+        // smart pointer
         std::unique_ptr<Animal> w_myPet( new Animal);
         w_myPet->setName("Jean Pet");
         std::unique_ptr<Animal> w_yourPet;
@@ -27,15 +28,18 @@ namespace vs11
         // set name again
         w_myPet->setName("another pet");
 
-        // at the end of this function aPet wil have the name "Another Name"
+        // at the end of this function aPet will have the name "Another Name"
     }
+
     // testing some factory method with C++11
     // using the move semantic to create method factory
     std::unique_ptr<TestClass> createTestClass()
     {
         return std::unique_ptr<TestClass>(new TestClass);
     }
+    
     void testUnitTest() {std::cout  << "Unit testing its bread and butter\n";}
+
     void stlTest()
     {
         std::unique_ptr<TestClass> w_mvClass =  createTestClass();

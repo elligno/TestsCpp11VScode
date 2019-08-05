@@ -1,5 +1,3 @@
-hello.ilk
-hello.pdb
 vc140.pdb
 *.ipch
 *.bin
@@ -37,3 +35,5 @@ vc140.pdb
 *.out
 *.app
 QuizQuestions/*.png
+helloworld.ilk
+helloworld.pdb

@@ -9,6 +9,9 @@ namespace vs11
     template<class T> using vec = std::vector<T>;
     template<typename T> using myGeneric = T;
 
+    // old stuff enum, now can declare with class key word
+    // what is the main dofference between old style and the new one.
+    // First new one  
     enum REG
     {
         stocks,
