@@ -7,6 +7,11 @@
             "label": "build",
             "type": "shell",
             "command": "./build.bat"
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "./clean.bat"
         }
     ]
 }

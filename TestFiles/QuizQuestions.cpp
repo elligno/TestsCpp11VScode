@@ -5,7 +5,7 @@
 
 namespace vs11 
 {
-    // C++11 alias 
+    // C++11 alias templates
     template<class T> using vec = std::vector<T>;
     template<typename T> using myGeneric = T;
 
@@ -32,12 +32,13 @@ namespace vs11
     {
         // Which are valid operations?
         REG team1;
-        LTC team2;
-        DRV team3;
+    //    LTC team2;
+    //    DRV team3;
 
         // team2=1;  not valid cannot assign an int
         //team3=options+futures; not valid cannot assigned int to DRV
         team1 = bonds;
+        
         // team1=futures; not valid cannot asign DRV to REG
         team1 = stocks;
    }

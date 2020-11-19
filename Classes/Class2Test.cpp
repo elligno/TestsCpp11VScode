@@ -17,4 +17,15 @@ namespace vs11
         //return m_sMember;
   //      return new Bus::Driver;
   //  }
+
+   SomeClass::SomeClass( const SomeClass& aOther)
+   {
+     std::cout << "we are in copy ctor\n";
+   }
+
+   SomeClass &SomeClass::operator=(const SomeClass &aOther)
+   {
+     std::cout << "we are in the assignment ctor\n";
+     return *this;
+   }
 } // End of namespace
