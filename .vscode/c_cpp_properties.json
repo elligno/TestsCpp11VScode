@@ -28,8 +28,8 @@
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
                 "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10150.0/ucrt",
-                "C:/Boost/boost_1_60_0/**",
-                "C:/JeansTests/TestVS2015/ProjectsVS15/BaseNumTypes",
+                "C:/Boost/boost_1_60_0/",
+                "C:/JeansTests/TestVS2015/ProjectsVS15/BaseNumTypes/",
                 "${workspaceFolder}/**"
             ],
             "defines": [

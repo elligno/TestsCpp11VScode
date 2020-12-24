@@ -9,8 +9,8 @@
 // STL includes
 //#include <vector>
 //#include <algorithm>
-// boost include
-//#include <boost/cast.hpp>
+// boost includes
+#include <boost/cast.hpp>
 // test include
 #include "Classes/Class2Test.h"
 // Numeric library includes
@@ -83,6 +83,20 @@ namespace vs11
 
 int main()
 {
+   // Testing boost library cast operator
+   int aa=1;
+   try
+   {
+       float bb = boost::numeric_cast<float>(aa);
+   }
+   catch( const boost::bad_numeric_cast& e)
+   {
+       std::cerr << e.what() << '\n';
+   }
+   // some sanity check
+   std::cout << "integer value is: " << aa << "\n";
+   std::cout << "float value is: " << aa << "\n";
+
    //
    // Testing our library (numeircal basic type) 
    //

@@ -35,5 +35,5 @@ vc140.pdb
 *.out
 *.app
 QuizQuestions/*.png
-helloworld.ilk
-helloworld.pdb
+*.ilk
+*.pdb
