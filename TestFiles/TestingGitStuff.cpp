@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 // Package includes
-#include "../myClass.h"
+#include "../Classes/myClass.h"
 #include "../Classes/Class2Test.h"
 
 namespace vs11 
@@ -22,8 +22,7 @@ namespace vs11
         std::unique_ptr<Animal> w_yourPet;
         w_yourPet = std::move(w_myPet);
         // now myPet is usable anymore (from move semantic)
-        // w_myPet->geNmae() will not work
-
+        // w_myPet->geName() will not work
         w_myPet.reset(aPet);
         // set name again
         w_myPet->setName("another pet");
@@ -38,7 +37,7 @@ namespace vs11
         return std::unique_ptr<TestClass>(new TestClass);
     }
     
-    void testUnitTest() {std::cout  << "Unit testing its bread and butter\n";}
+    void testUnitTest() { std::cout  << "Unit testing its bread and butter\n";}
 
     void stlTest()
     {

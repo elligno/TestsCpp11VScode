@@ -15,7 +15,7 @@ REM By: Jose Luis Blanco Claraco, 2013
 REM      Released to Public Domain.
 REM
 REM Revision history
-REM  Jean Belanger (Decmber 2020)
+REM  Jean Belanger (December 2020)
 REM   Rename the file by clean.bat
 REM    Usage:
 REM     ./clean.bat obj

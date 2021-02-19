@@ -1,6 +1,7 @@
-
+// c++ include
 #include <iostream>
-#include "Classes/Class2Test.h"
+// project include
+#include "../Classes/Class2Test.h"
 
 namespace vs11 
 {

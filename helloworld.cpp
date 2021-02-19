@@ -2,6 +2,7 @@
 // C++ includes
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <valarray> // numerical array (efficiency)
 
 //#include <cstdlib>
@@ -189,7 +190,51 @@ int main()
   //vs1::testingShardPtr();
 //    vs1::testToAddFile();
 
+	// 
+	const char* const w_myString="jean";
+	
+	// some test with constant expression
+	size_t w_sizeStr = ::strnlen_s(w_myString,5);
+
+	// i am not sure what a constant expression is exactly
+	// see  appendix of Wilson book about C++ Concurrency
+	// below an example of us of the constant expression usage 
+	constexpr int w_intExpr = 2; // C++11
+	constexpr unsigned w_arraySize = 5;
+	unsigned w_arrSize = 4;
+	char w_myArray[w_arraySize];
+	unsigned i = 0;
+	w_myArray[i++] = 'a';
+
+	//char w_anotherArray[w_arrSize];  not a constant expression (compile error)
+
+	std::cout << "Testing VS2015 new setup\n";
+
+	// create an alias (typedef is now deprecated)
+	using ptr2int = std::unique_ptr<int*>; // smart pointer
+
+	// good practice is  to use the make_unique utility (see Scott Meyer's book)
+	ptr2int w_testMakeUnique = std::make_unique<int*>(/*new int*/);
+	if( w_testMakeUnique)
+	{
+		std::cout << "We have a unique pointer declared with an alias\n";
+	}
+
+	std::cout << "make unique supported with vs2015\n";
+
+	// check if we can list initializer 
+	std::vector<int> w_listVec = {1,2,43,4,5 };
+	if( w_listVec.size()==5)
+	{
+		std::for_each( std::begin(w_listVec), std::end(w_listVec), 
+			[](int aInt2Pritnt) 
+		{
+			std::cout << "Value is:" << aInt2Pritnt << "\n"; 
+		});
+	}
+
     std::cout << "Hello World!";
 
-	return 0;
+	// returning safely from main application 
+	return EXIT_SUCCESS;
 }
