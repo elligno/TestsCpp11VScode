@@ -30,7 +30,7 @@
 #include <boost/range/adaptors.hpp>            // ...
 // #include <boost/range/adaptor/map.hpp>
 // #include <boost/range/adaptor/filtered.hpp>    // ...
-#include "Btl_PrintUtils.hpp"
+#include "../Btl_PrintUtils.hpp"
 
 namespace cpp11 
 {
@@ -258,13 +258,20 @@ namespace cpp11
 		auto w_first = w_vecptrInt.back();
 		std::cout << "The type of the pointer is " << typeid(w_first).name() << "\n";
 		std::cout << "The value of the first element is " << *w_first << "\n";
-		if (!w_vecptrInt.empty())
+		if( !w_vecptrInt.empty())
 		{
 			// delete each element of the container in a simple manner
-			std::for_each( std::begin(w_vecptrInt),std::end(w_vecptrInt), 
-				std::bind(::operator delete, _1));
+			// std::for_each( std::begin(w_vecptrInt),std::end(w_vecptrInt), 
+			// 	std::bind(::operator delete, _1)); not compile, complaining about template deduce 
+			std::for_each( std::begin(w_vecptrInt),std::end(w_vecptrInt), [](int* aIntPtr)
+			{
+				if( aIntPtr != nullptr)
+				{
+					delete aIntPtr;
+					aIntPtr=nullptr;
+				}
+			});
 		}
-
 		
 		// this won't work because the "ptr_list_of"  
 		// works only with the boost ptr_container

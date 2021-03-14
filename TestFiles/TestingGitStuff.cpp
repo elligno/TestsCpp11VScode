@@ -55,7 +55,7 @@ namespace vs11
         std::cout << "Size of the original list:" << w_checkSiz << "\n";
 
         // let say i want to erase a value from the list, size still the same
-        auto w_foundIt = std::find(w_listRem.cbegin(), w_listRem.cend(), 8);
+        auto w_foundIt = std::find( w_listRem.cbegin(), w_listRem.cend(), 8);
         if (w_foundIt != w_listRem.cend())
         {
             w_listRem.erase(w_foundIt);

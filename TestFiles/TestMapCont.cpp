@@ -1,7 +1,4 @@
 
-#ifndef testmapcont_H
-#define testmapcont_H
-
 // C++ includes
 #include <iostream>
 #include <string>
@@ -12,20 +9,21 @@
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm/copy.hpp>
 // package includes
-#include "SomeClass.h"
-#include "FFAlgorithm.h"
-#include "AlgorithmClass.h"
+//#include "../Classes/SomeClass.h"
+//#include "FFAlgorithm.h"
+//#include "../Classes/AlgorithmClass.h"
 
-namespace aa { void* getCOMPtr( aa::BaseClass* aBaseptr);}
+//namespace aa { void* getCOMPtr( aa::BaseClass* aBaseptr);}
 
 namespace aa 
 {
+#if 0
 	// this will be used in our programming environment
 	// in the main function or controller 
 	void testFactoryMethods()
 	{
 		// Some usage of our factory methods design pattern
-		Class* w_algoCls=Class::forName( std::string("DBvalidate"));
+		Class* w_algoCls = Class::forName( std::string("DBvalidate"));
 		
 		// in the current version, newInstance return new AlgorithmClass
 		// i must delete the pointer here since the factory methods
@@ -34,7 +32,7 @@ namespace aa
 		IConservative* w_ffAlgo = (IConservative*)w_algoCls->newInstance();
 		
 		// sanity check
-		if( w_ffAlgo!=nullptr)
+		if( w_ffAlgo != nullptr)
 		{
 			// compute flux at the cell interface
 			w_ffAlgo->calculFF();
@@ -56,7 +54,7 @@ namespace aa
 
 		// do some clean-up, for example delete IConservative pointer
 	}
-
+#endif
 	// testing some basic map functionalities
 	void testMap()
 	{
@@ -91,7 +89,7 @@ namespace aa
 				std::ostream_iterator<int>(std::cout, ","));
 
 		// testing our factory methods that we are implementing 
-		testFactoryMethods();
+	//	testFactoryMethods();
 	}
 
   // just testing the multimap
@@ -99,7 +97,6 @@ namespace aa
   {
     // Faire un test avec un double pointer (Interface**)
     // comme chez tech2020 afin de l'ajouter dans le map
-     std::multimap<std::string,aa::BaseClass*> m_testMapKey;
+   //  std::multimap<std::string,aa::BaseClass*> m_testMapKey;
   }
 } // End of namespace
-#endif // !testmapcont_H

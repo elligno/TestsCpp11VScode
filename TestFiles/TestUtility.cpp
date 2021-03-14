@@ -14,7 +14,10 @@
 
 namespace cpp11 
 {
-	// pair of this class no compile 
+	/**
+	 * @brief pair of this class no compile 
+	 * 
+	 */
 	class A 
 	{
 	public:
@@ -30,14 +33,14 @@ namespace cpp11
 		Foo1(int aInt, float aFloat) { std::cout << "Foo1::Foo1(int,float)";    }
 	};
 
-  template <typename T, typename U>
-  struct pair_creator : std::binary_function<T, U, std::pair<T, U>>
-  {
-    std::pair<T, U> operator() ( const T& arg1, const U& arg2 ) const 
-    {
-      return std::make_pair( arg1, arg2 );
-    }
-  };
+//   template <typename T, typename U>
+//   struct pair_creator : std::binary_function<T, U, std::pair<T, U>>
+//   {
+//     std::pair<T, U> operator() ( const T& arg1, const U& arg2 ) const 
+//     {
+//       return std::make_pair( arg1, arg2 );
+//     }
+//   };
 
 	// _________________________________________________________________
 	//
@@ -132,7 +135,7 @@ namespace cpp11
 		std::pair<int,Foo1> w_pt(42,w_tupl);   // pass the tuple to Foo1 ctor
 
 	    //	std::pair<int,float> w_typeCheck(1,2.45);
-		auto w_pp1=std::make_pair( 1, 2.45); // double as second (implicit conversion)
+		auto w_pp1 = std::make_pair( 1, 2.45); // double as second (implicit conversion)
 		// float w_fl;  warning when extracting the second argument
 		double w_dbl;
 		std::tie( std::ignore,w_dbl)=w_pp1;
@@ -165,9 +168,11 @@ namespace cpp11
 		assert(w_vecInt1.size() - 1 == w_rng1.size()); // new range
 		assert(w_vecInt1.size() - 1 == w_rng2.size()); // new range
 
-		// using the transform algorithm with bind adaptor (C++11)
-		std::transform( w_rng1.begin(), w_rng1.end(), w_rng2.begin(),
-					    w_pairOfInt.begin(), std::bind(pair_creator<int, int>(), _1, _2));
+        // need to write a lambda function instead
+		
+		// // using the transform algorithm with bind adaptor (C++11)
+		// std::transform( w_rng1.begin(), w_rng1.end(), w_rng2.begin(),
+		// 			    w_pairOfInt.begin(), std::bind(pair_creator<int, int>(), _1, _2));
 
 		//		int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 		// i should have a warning about safe iterator or something like that

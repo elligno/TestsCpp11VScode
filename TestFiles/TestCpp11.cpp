@@ -2,6 +2,8 @@
 #include <iostream>
 #include <array>
 #include <vector>
+// Boost include
+#include <boost/range/iterator_range.hpp> // iterator range library
 
 // namespace 
 // {
@@ -29,11 +31,13 @@ namespace vs15
 		X( const X& aOther) : m_ptr2int(new int[5000]) 
 		{
 			std::cout << "We are in the X::X(const X&) copy ctor" << "\n";
-			// copy data across
-			std::copy( aOther.m_ptr2int, aOther.m_ptr2int+5000, m_ptr2int);
+			
+			// copy data across (use boost iterator range for stl algo compatibility)
+			auto int_rng = boost::make_iterator_range( aOther.m_ptr2int, aOther.m_ptr2int+5000);
+			std::copy( int_rng.begin(), int_rng.end(), m_ptr2int);
 		}
 		// move ctor (rvalue reference)
-		X(X&& aOther) : m_ptr2int(aOther.m_ptr2int) // copy pointer to the data
+		X( X&& aOther) : m_ptr2int(aOther.m_ptr2int) // copy pointer to the data
 		{
 			std::cout << "We are in the X::X(const X&&) move ctor" << "\n";
 			// leave other instance with pointer to nullptr 

@@ -2,14 +2,12 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+// Boost include
 #include <boost/polymorphic_cast.hpp>
-
 // App. includes
-#include "../Test/testClassB.h"
-// #include "../Test/testCLassA.h"
-#include "../TestCpp/Btl_IAnotherInterface.h"
-
-#include "../IUpdateable.h"
+#include "testClassB.h"
+#include "Btl_IAnotherInterface.h"
+#include "IUpdateable.h"
 
 namespace aa
 {
@@ -21,22 +19,29 @@ namespace aa
 		{
 			std::cout << "we are in JeanCls::update()\n";
 		}
-		// some method provided 
-		void print( std::iostream& aIO) {}
-    void conv2str(Btl::IAnotherInterface* aInterface) {/*to be completed*/}
+		// some method provided
+		void print(std::iostream &aIO) {}
+		void conv2str(Btl::IAnotherInterface *aInterface)
+		{ /*to be completed*/}
 	private:
 		float m_fval;
 	};
+
 	class JeanType : public IUpdateable  
 	{
 	public:
 		// implement base class method
-		void update() override 
+		void update() override
 		{
-			std::cout << "We re in JeanType::update()\n"; 
+			std::cout << "We re in JeanType::update()\n";
 		}
 		// overriden by subclass
-		virtual int checkRet() {std::cout << "returning a int\n"; return 1;}
+		virtual int checkRet()
+		{
+			std::cout << "returning a int\n";
+			return 1;
+		}
+
 	private:
 		std::string m_name;
 	};
@@ -88,7 +93,7 @@ namespace aa
   private:
   };
 
-  void testAbstract2Drived(testCastBase2Derived* aPtr2Derived)
+  void testAbstract2Drived( testCastBase2Derived* aPtr2Derived)
   {
     std::cout << "Calling abstract method\n";
     aPtr2Derived->abstractethod();

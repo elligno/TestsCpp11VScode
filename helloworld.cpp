@@ -19,10 +19,10 @@
 #include "ElgoPtr.h" // in house smart pointer impl
 #include "PhysCte.h" // some physical constant
 
-// delaring some global function or variables
+// declaring some global function or variables
 namespace vs11
 {
-     void testBindMechanism(); // test virtual ...
+     //void testBindMechanism();  test virtual ...
 //     void testToAddFile();
 //     void testingShardPtr();
      void testClassBond();
@@ -107,7 +107,8 @@ int main()
    const double test = basenum::PhysicalConstant::sGravity;
    std::cout << "Gravity value is: " << test << "\n";
 
-   // create a grid with E. mcNeil discretization (dx=10., x0=0, xN=1000)
+   // create a grid with E. McNeil discretization (dx=10., x0=0, xN=1000)
+   // Node index from i=1,..,100
    std::shared_ptr<jb::gridLattice> w_grid = // E McNeil discretization as default
 	   std::make_shared<jb::gridLattice>( std::string("d=1 [0,1000] [1:100]"));
 
@@ -173,7 +174,7 @@ int main()
 
     // Quiz test
    // vs11::testMvCall();
-    vs11::testBindMechanism();
+ //   vs11::testBindMechanism();
  //   vs11::testBase();
 
   //  vs11::StaticVarTest w_checkCall;

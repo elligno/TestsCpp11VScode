@@ -78,7 +78,7 @@ namespace cpp11
   // want to test the std function and compare with ptr-2-function
   // function  is a delegate very similar to c# delegate (oriented 
   // version of the pointer-2-function)
-  void createptr2func(p2f aPtr2Func)
+  void createptr2func(ptrf aPtr2Func)
   {
     // can we check if a pointer to func is null?
     // whatever

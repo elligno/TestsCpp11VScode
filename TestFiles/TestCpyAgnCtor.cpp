@@ -4,7 +4,7 @@
 // C++ include
 #include <iostream>
 // project include
-#include "NocpyAssgnClass.h"
+#include "../Classes/NocpyAssgnClass.h"
 
 namespace vs15 
 {
