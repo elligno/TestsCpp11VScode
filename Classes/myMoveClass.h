@@ -7,11 +7,11 @@
 // A typical move constructor definition would look like this:
 // C::C(C&& other); //C++11 move constructor
 // 
-// It doesn’t allocate new resources. Instead, 
-// it pilfers other‘s resources and then sets 
+// It doesnï¿½t allocate new resources. Instead, 
+// it pilfers otherï¿½s resources and then sets 
 // other to its default-constructed state.
 // The move constructor is much faster than a copy 
-// constructor because it doesn’t allocate memory 
+// constructor because it doesnï¿½t allocate memory 
 // nor does it copy memory buffers.
 //
 // A move assignment operator has the following signature:
@@ -24,26 +24,65 @@
 // operator performs four logical steps:
 // 
 // Release any resources that *this currently owns.
-// 	Pilfer other‘s resource.
+// 	Pilfer otherï¿½s resource.
 // 	Set other to a default state.
 // 	Return *this.
 //
 namespace vs15
 {
+	/**
+	 * @brief Testing the C++11 move ctor
+	 * 
+	 *  A move constructor looks like this:
+     *  A typical move constructor definition would look like this:
+     *  C::C(C&& other); //C++11 move constructor
+     *
+     *  It doesnï¿½t allocate new resources. Instead, 
+     *  it pilfers otherï¿½s resources and then sets 
+     *  other to its default-constructed state.
+     *  The move constructor is much faster than a copy 
+     *  constructor because it doesnï¿½t allocate memory 
+     *  nor does it copy memory buffers.
+	 */
 	class MemoryPage
 	{
-		size_t m_size;
-		char * m_buf;
+		size_t m_size; /**< */
+		char * m_buf;  /**< */
 	public:
-		explicit MemoryPage(int sz = 512);
-		~MemoryPage();
+	/**
+	 * @brief Construct a new Memory Page object
+	 * 
+	 * @param sz
+	 */
+	explicit MemoryPage( int sz = 512);
 
-		//typical C++03 copy ctor and assignment operator
-		MemoryPage(const MemoryPage&);
-		MemoryPage& operator=(const MemoryPage&);
+	/**
+	 * @brief Destroy the Memory Page object
+	 * 
+	 */
+	~MemoryPage();
 
-		// typical C++11 move ctor 
-		MemoryPage( MemoryPage&& other); //C++11 move ctor
-		MemoryPage& operator= ( MemoryPage&& other);//C++11 move assignment operator
+	/**
+	 * @brief Construct a new Memory Page object
+	 * 
+	 */
+	MemoryPage( const MemoryPage&);
+	
+	/**
+	 * @brief 
+	 * 
+	 * @return MemoryPage& 
+	 */
+	MemoryPage& operator= ( const MemoryPage&);
+
+	// typical C++11 move ctor 
+
+	/**
+	 * @brief Construct a new Memory Page object (//C++11 move ctor)
+	 * 
+	 * @param other object to be moved
+	 */
+	MemoryPage( MemoryPage&& other); 
+	MemoryPage& operator= ( MemoryPage&& other);//C++11 move assignment operator
 	};
 } // End of  namespace
