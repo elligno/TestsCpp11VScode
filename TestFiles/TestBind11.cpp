@@ -1,8 +1,4 @@
 
-//  Author: Jean Belanger (Elligno Inc.)
-//  Date of creation:
-//  
-
 #include <cassert>
 // C++ includes
 #include <string>
@@ -35,7 +31,7 @@
 namespace cpp11 
 {
 	template <typename T, typename U>
-	struct pair_creator : std::binary_function<T, U, std::pair<T, U> >
+	struct pair_creator //: std::binary_function<T, U, std::pair<T, U>> not supported (deprecated) in C++14
 	{
 		std::pair<T, U> operator()( T arg1, U arg2 ) const 
 		{
@@ -52,9 +48,9 @@ namespace cpp11
 	// std::transform( start1, end2, start2, [](int a) { return std::make_pair(a,2);}
 
 	// some typedef for cleaner code
-	typedef std::function<int(int,int)> BinaryFunc;
-  typedef std::function<int(int)> UnaryFunc;
-  typedef std::function<double(double)> UnaryDblFunc;
+	using BinaryFunc = std::function<int(int,int)>;
+    using UnaryFunc = std::function<int(int)>;
+    using UnaryDblFunc = std::function<double(double)>;
 
 	// can i do that? humm!! it's a wrapper (it compiles!!)
 	class myFunc : std::function<void(int)> 
@@ -139,26 +135,28 @@ namespace cpp11
 	// Some test of the bind mechanism
 	void testBindingFunc() 
 	{
-		typedef std::vector<int> vecInt;
+		using vecInt = std::vector<int>;
 		using namespace std::placeholders;
 
 		vecInt w_vec;
 
 		// initialize the count, didn't find any yet 
-		int countBoost = 0;
+		//int countBoost = 0;
 
 		// (i > 5 && i <=10) implementation without any loop 
 		// not error prone and easy to understand because of the clarity
-		countBoost = boost::count_if( w_vec,
-			std::bind( std::logical_and<bool>(),         // &&
-			std::bind( std::greater<int>(),    _1, 5),   // >5
-			std::bind( std::less_equal<int>(), _1, 10))  // <= 10
+		auto w_valInt=10;
+		auto valFive = 5;
+		auto countBoost = boost::count_if( w_vec,
+			std::bind( std::logical_and<bool>(),              // &&
+			std::bind( std::greater<int>(),    _1, valFive),   // >5
+			std::bind( std::less_equal<int>(), _1, w_valInt))  // <= 10
 			);
 
 		// for_each expect a unary function, need to bind
 		// what is the meaning of the 2 call? are we binding the second and then the first argument?
-		std::for_each( w_vec.begin(), w_vec.end(), std::bind( std::multiplies<int>(), _1,2)); // tied first parameter??
-		std::for_each( w_vec.begin(), w_vec.end(), std::bind( std::multiplies<int>(), 3,_1)); // tied second parameter??
+		std::for_each( w_vec.begin(), w_vec.end(), std::bind( std::multiplies<int> {}, _1,2)); // tied first parameter??
+		std::for_each( w_vec.begin(), w_vec.end(), std::bind( std::multiplies<int> {}, 3,_1)); // tied second parameter??
 		// let's give a try with plus which is also a binary function
 
 		// 		vecint numbers;
@@ -199,12 +197,12 @@ namespace cpp11
     // just a test to make sure that i do understand, i shall end up
     // with element subtracted by 2 (bind2nd version)
     std::transform( wTmpVec.begin(), wTmpVec.end(), wTmpVec.begin(),
-      std::bind( std::minus<float>(),_1,2.f));
+      std::bind( std::minus<float>{},_1,2.f));
 
     // copy vector
     std::vector<float> w_checkVec( w_X.begin(), w_X.end());
     std::transform( w_checkVec.begin(), w_checkVec.end(), w_checkVec.begin(), 
-       			std::bind2nd( std::minus<float>(),2.f));
+       			std::bind( std::minus<float>{},std::placeholders::_1,2.f));
 
     // both ranges shall be equal (value)
     if (!std::equal(wTmpVec.begin(), wTmpVec.end(), // first range
@@ -217,14 +215,14 @@ namespace cpp11
     // actually we bind the first argument to 2 (as bind1st use to do), 
     // it gives negative number -8, -18,-28,-38,...,-98
 		std::transform( w_X.begin(), w_X.end(), w_X.begin(),
-			std::bind( std::minus<float>(),2,_1)); // are we really binding the second element?
+			std::bind( std::minus<float>{},2.f,_1)); // are we really binding the second element?
                                              // No we are binding the first argument exactly
                                              // the same way we use to do with bind1st 
 		
     // let's say now we want to bind the second argument, this way we should end up
     // with result such as -10, ... second argument binded as bind2nd before c++11
     std::transform( w_X.begin(), w_X.end(), w_X.begin(),
-      std::bind( std::minus<float>(),_1,2));
+      std::bind( std::minus<float>{},_1,2.f));
 
     std::cout << "Printing grid node coordinate\n";
 
@@ -242,7 +240,7 @@ namespace cpp11
 		using namespace boost::adaptors;
 		using namespace boost::assign;
 
-		typedef std::pair<int,int> Pair;
+		using Pair = std::pair<int,int>;
 
 		// can i do a typedef on the bind mechanism?
 		// below what we do, we are assigning a functor (bind) 
@@ -251,10 +249,11 @@ namespace cpp11
 	    //  can i call it this way?
 		choose_first(std::make_pair(1,2));
 
+#if 0
 		// Create a vector of pointer
 		std::vector<int*> w_vecptrInt; 
-		w_vecptrInt = list_of<int*>( new int(1))( new int (2))( new int(6))( new int(3));
-		assert( w_vecptrInt.size()==4);
+		w_vecptrInt += list_of<int*>( new int(1))( new int (2))( new int(6))( new int(3));
+		assert( w_vecptrInt.size() == 4);
 		auto w_first = w_vecptrInt.back();
 		std::cout << "The type of the pointer is " << typeid(w_first).name() << "\n";
 		std::cout << "The value of the first element is " << *w_first << "\n";
@@ -263,7 +262,8 @@ namespace cpp11
 			// delete each element of the container in a simple manner
 			// std::for_each( std::begin(w_vecptrInt),std::end(w_vecptrInt), 
 			// 	std::bind(::operator delete, _1)); not compile, complaining about template deduce 
-			std::for_each( std::begin(w_vecptrInt),std::end(w_vecptrInt), [](int* aIntPtr)
+			std::for_each( std::begin(w_vecptrInt),std::end(w_vecptrInt), 
+			[] ( int* aIntPtr)
 			{
 				if( aIntPtr != nullptr)
 				{
@@ -272,7 +272,8 @@ namespace cpp11
 				}
 			});
 		}
-		
+#endif
+
 		// this won't work because the "ptr_list_of"  
 		// works only with the boost ptr_container
 // 		std::vector<int*> w_ag12;
@@ -281,10 +282,18 @@ namespace cpp11
 		// ptr_list_of is used with the ptr container of boost
 		// don't need to call new manually for each element
 		// don't need to call delete when it goes out of scope
-		boost::ptr_vector<int> w_testPtrListOf=ptr_list_of<int>(1)(2)(6)(3);
+		struct Foo {
+			Foo() :i{} {} 
+			Foo(int aI): i{aI} {}
+			int i;
+			};
+//		boost::ptr_vector<Foo> w_testPtrListOf;
+//		w_testPtrListOf = ptr_list_of<Foo>(),(1),(2);
+
+//		BOOST_ASSERT( w_testPtrListOf.size() == 3 );
 		
 		// create a pair vector for testing
-		std::vector<Pair> w_vofpair=pair_list_of(1,2)(2,3)(21,5)(3,6);
+		std::vector<Pair> w_vofpair = pair_list_of(1,2)(2,3)(21,5)(3,6);
 		std::list<Pair::first_type> w_keyList;
     // way to print the key of the pair element very efficiently
 		for( auto& first : w_vofpair | map_keys) // range loop
@@ -302,9 +311,9 @@ namespace cpp11
     // create pair using lambda
 		std::transform( std::begin(start1), std::end(start1), std::begin(start2), // ranges 
 			std::back_inserter(w_vecofpair),  // result 
-			[](int a,int b) { return std::make_pair(a,b);}); // pair creator
+			[] (int a,int b) { return std::make_pair(a,b);}); // pair creator
 	
-		for (auto& pairInt : w_vecofpair)
+		for ( auto& pairInt : w_vecofpair)
 		{
 			std::cout << pairInt << "\n"; 
 		}
@@ -340,7 +349,7 @@ namespace cpp11
 		// what we doing here, we are simply creating a binary functor with its 
 		// second arg bind to 2 (adapter that make a binary looks like a unary)
 		// it's more bind2nd argument than bind1st
-    auto w_plusbind2nd = std::bind( std::plus<int>(), _1,_2);
+    auto w_plusbind2nd = std::bind( std::plus<int>{}, _1,_2);
 //     std::transform(start1.begin(),start1.end(),std::back_inserter(w_res),
 //       std::bind(std::minus<int>(),1,_1));
 

@@ -50,7 +50,7 @@ namespace vs11
        TreasuryBond  b2, *tp;
        MuniBond b3, *mp;
 
-       Bond* w_bonds[3] {&b1,&b2,&b3};
+       Bond* w_bonds[3] { &b1,&b2,&b3 };
        Bond *bp;
        double uniqueValue;
 

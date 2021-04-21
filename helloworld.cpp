@@ -30,7 +30,10 @@ namespace vs11
 //     void testMvCall();
 //     void testInitialization();
 // 	void stlTest();
-}
+void someSharedPtr( std::shared_ptr<int> aX);
+void someUniqPtr( std::unique_ptr<int> aX);
+void someMS(int* aX);
+}//vs11
 
 	// signature should be char s[]??
 	// because strlen(char*) is it the same as strlen(s[])?
@@ -84,6 +87,10 @@ namespace vs11
 
 int main()
 {
+   int* w_y = new int(20);
+   vs11::someMS(w_y);
+   std::cout << "Value of y is: " << *w_y << "\n";
+
    // Testing boost library cast operator
    int aa=1;
    try
