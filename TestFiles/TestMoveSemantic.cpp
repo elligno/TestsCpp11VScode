@@ -3,15 +3,14 @@
 #include <memory> // unique pointer
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <list>
 // Boost includes
 #include <boost/noncopyable.hpp>
 #include <boost/assign/list_of.hpp>
 #include <boost/assign/std/vector.hpp>
-
-// test 
-// temporary fix
-namespace aa {class inheritSomeClass;} // ??
+// App include
+#include "../Classes/myMoveClass.h"
 
 // Reference: see article "C++11 feature that every programmer should know ..."
 // Also see reference appendix book of Anthony Wilson "Concurrency ..."
@@ -20,32 +19,16 @@ namespace aa {class inheritSomeClass;} // ??
 
 namespace cpp11 
 {
-  class MoveTest
-  {
-  public:
-    // testing ctor 
-    // default ctor
-    MoveTest() { std::cout << "Default ctor of MoveTest\n";}
-    MoveTest( const std::string& aStr) : m_str11(aStr) {}
-    // Copy ctor
-    MoveTest( const MoveTest& aOther) { std::cout << "Copy ctor of MoveTest\n";}
-    // Move ctor
-    MoveTest( const MoveTest&& aOther) { std::cout << "Move ctor of MoveTest\n";}
-  protected:
-  private:
-    std::string m_str11;
-    std::vector<int> m_vecofInt;
-  };
-
   // right-value reference (move semantic)
-  void moveFunc( const std::vector<int>&& aMv)
+  void moveFunc( std::vector<int>&& aMv) // rvalue as argument
   {
+    // IMPORTANT inside the function aMv is a left value
     // looks like it's working (i am not sure the behavior)
-    std::vector<int> w_checkMv = aMv;
+    std::vector<int> w_checkMv( std::move(aMv)); // call move ctor
 
     // do we still have a vector after this operation
     // let's check  if we still have a vector that it's working
-    if (aMv.empty())
+    if( aMv.empty())
     {
       std::cout << "I still do understand the move semantic\n";
     }
@@ -72,7 +55,7 @@ namespace cpp11
     std::vector<int> w_mvVec = std::move(w_orgVec);
 
     // sanity check (move semantic the original vector shall be empty) 
-    if (w_orgVec.empty())
+    if( w_orgVec.empty())
     {
       std::cout << "I do understand the move semantic basically\n";
     }
@@ -81,28 +64,54 @@ namespace cpp11
     //moveFunc(w_mvVec); compile error, trying to bound a lvalue to a rvalue
     moveFunc( std::move(w_mvVec)); // now it works
     
-    // looks like it's working, do create a temporary object?
+    // looks like it's working, do create a temporary object? NO!!!
     moveFunc( std::vector<int>(5)); // 5 element initialized to zero
 
     // create a ove 
-    std::vector<MoveTest> w_mvTestVec;
+    std::vector<vs15::MoveTest> w_mvTestVec;
   }
 
-  void testMyMvCtor( const MoveTest&& aMvObj)
+  // rvalue reference
+  void testMyMvCtor( vs15::MoveTest&& aMvObj)
   {
-    using namespace boost::assign;
-
-    std::list<int> w_listInt;
-    w_listInt = list_of(1)(2)(3)(4)(5);
-
+    // IMPORTANT 
+    //   Although rvalue reference can bind to rvalue, within
+    //   a function itself it is treated as an lvalue.   
     std::cout << "We have a mv ctor working\n";
+    vs15::MoveTest w_mvClass;
+    vs15::MoveTest w_mv2Cpy = w_mvClass; // copy ctor?
+  }
+
+  vs15::MoveTest checkSomeNvFeatures()
+  {
+    vs15::MoveTest w_mvClazz( std::string("JeanMvTest"));
+    w_mvClazz.addElem(1);
+    w_mvClazz.addElem(2);
+    w_mvClazz.addElem(3);
+
+    return w_mvClazz; // return by value means temporary object (call mv ctor)
   }
 
   void testRefSemantic()
   {
     std::cout << "Testing the reference semantic\n";
     // creating a vector of smart pointer
-    std::vector<std::unique_ptr<MoveTest>> w_refSemantic;
+    std::vector<std::unique_ptr<vs15::MoveTest>> w_refSemantic;
+   
+    // just testing, this way make things clear instead of using number
+    // each enumerator variable has its corresponding variables in tuple 
+    // tuple variables (use with get)
+    enum TplVar 
+    {
+      A=0,
+      Q=1,
+      H=2
+    };
 
+    // Scott Meyers comment about the only reason why we should use old enum 
+    std::tuple<double, double, double> w_typeDeuc = std::make_tuple(1.,2.,3.);
+    auto w_A = std::get<TplVar::A>(w_typeDeuc); // Wetted area
+
+    std::cout << "Tuple first value is: " << w_A << std::endl;
   }
 } // End of namespace

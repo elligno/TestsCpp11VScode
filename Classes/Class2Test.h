@@ -2,20 +2,25 @@
 
 // C++ includes
 #include <iostream>
+#include <memory>
 #include <string>
 
 namespace vs11
 {
+    /**
+     * @brief ... to be completed
+     * 
+     */
     class JeanTest
     {
         public:
-        virtual int getVolume() {return 0;}
+        virtual int getVolume() { return 0;}
         char getType() const    { return 'R';}
     };
     class Volume1 : public JeanTest
     {
         public:
-        int getVolume() override {return 50;}
+        int getVolume() override { return 50;}
         char getType() const     { return 'V';}
     };
     class Volune2 : public JeanTest
@@ -29,30 +34,55 @@ namespace vs11
         public:
         static int m_sVar;
     };
+
     class Driver; // forward declarartion
-    class Bus
+    class Bus 
     {
-       public:
-         static Bus::Driver* createDriver()
-         {
-             return nullptr; //new Driver();
-         }
-       protected:
-         struct Driver
-         {
-            std::string name;
-         };
-     };
-     class Widget
+      public: // protected cannot be accessed Bus::Driver
+        class Driver
+        {
+            public:
+            std::string m_name;
+        };
+      public:
+        static Driver* createDriver()
+        { return new Driver();}
+      private:
+        int seats;
+    };
+
+    class Widget
      {
          public:
-         void createIt() {std::cout << "Widget creator\n";}
+         void createIt() { std::cout << "Widget creator\n";}
      };
 
+     class move_only 
+     {
+         private:
+         std::unique_ptr<Widget> m_data;
+         public:
+         move_only()=default;
+         move_only( const move_only&)=delete;
+         move_only( move_only&& aOther)
+         : m_data(std::move( aOther.m_data))
+         {
+         }     
+         move_only& operator= (const move_only&)=delete;
+         move_only& operator= ( move_only&& aOther)
+         {
+            m_data = std::move( aOther.m_data);
+            return *this;
+         }
+    };
+    /**
+     * @brief 
+     * 
+     */
      class SomeClass
      {
          public:
-         // cannot do that because chceckStatic is not static and call by a static method
+         // cannot do that because checkStatic is not static and call by a static method
          // in this case no this pointer is pass implictly as argument to the method, then
          // we cannot reference a data member (this->checkStatic)
          //static void callNonStatic() {std::cout << checkStatic << "\n";}
@@ -60,7 +90,7 @@ namespace vs11
          static int data;
 
          SomeClass() = default;
-         SomeClass( const SomeClass& aOther); //copy ctor
+         SomeClass( const SomeClass& aOther);            //copy ctor
          SomeClass& operator= (const SomeClass& aOther); //assignment ctor
 
          static int getStaticVar() {return data;}

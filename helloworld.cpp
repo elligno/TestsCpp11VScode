@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <valarray> // numerical array (efficiency)
+#include <array>
 
 //#include <cstdlib>
 //#include <chrono>
@@ -14,70 +15,174 @@
 #include <boost/cast.hpp>
 // test include
 #include "Classes/Class2Test.h"
-// Numeric library includes
-#include "jb_scalarField.h" // include grid lattice
-#include "ElgoPtr.h" // in house smart pointer impl
-#include "PhysCte.h" // some physical constant
+#include "Classes/myMoveClass.h"
+#include "Classes/myStringClass.h"
+#include "Classes/ClassVS15.h"
+//#include "Classes/TmxString.h"
 
 // declaring some global function or variables
 namespace vs11
 {
-     //void testBindMechanism();  test virtual ...
-//     void testToAddFile();
-//     void testingShardPtr();
-     void testClassBond();
-//     void testBase();
-//     void testMvCall();
-//     void testInitialization();
-// 	void stlTest();
-void someSharedPtr( std::shared_ptr<int> aX);
-void someUniqPtr( std::unique_ptr<int> aX);
-void someMS(int* aX);
-}//vs11
+    //void testBindMechanism();  test virtual ...
+    //     void testToAddFile();
+    //     void testingShardPtr();
+    void testClassBond();
+    void testBase();
+    void testMvCall();
+    //     void testInitialization();
+    void validateMStest();
+    // 	void stlTest();
+    void testClassBond();
+    std::unique_ptr<int[]> retUniquePtrArray();
+    void CtorInit();
+} //vs11
 
-	// signature should be char s[]??
-	// because strlen(char*) is it the same as strlen(s[])?
-	// i don't think so, need to check
-	void invertStr( char* aStr2Invert)
-	{
-		using namespace std;
+namespace cpp11  
+{
+    vs15::MoveTest checkSomeNvFeatures();
+}//cpp11
 
-		cout << "we are ready to invert the string\n";
+namespace SfxType 
+{
+    void testScalarField(); 
+}//SfxType
 
-		// just a basic test to invert a string
-		// IMPORTANT don't forget to subtract 1 because
-		// of the null terminated character for C string
-		for( size_t i = 0, j = ::strlen(aStr2Invert)-1; i < j; ++i,--j)
-		{
-			int w_Char = aStr2Invert[j];
-			aStr2Invert[j] = aStr2Invert[i];
-			aStr2Invert[i] = w_Char;
-		}
+namespace vs15 { int maxProfit( int price[], int start, int end);}
 
-	 	cout << "We just finished to invert the string\n";
+// signature should be char s[]??
+// because strlen(char*) is it the same as strlen(s[])?
+// i don't think so, need to check
+void invertStr(char *aStr2Invert)
+{
+    using namespace std;
+
+    cout << "we are ready to invert the string\n";
+
+    // just a basic test to invert a string
+    // IMPORTANT don't forget to subtract 1 because
+    // of the null terminated character for C string
+    for (size_t i = 0, j = ::strlen(aStr2Invert) - 1; i < j; ++i, --j)
+    {
+        int w_char = aStr2Invert[j];
+        aStr2Invert[j] = aStr2Invert[i];
+        aStr2Invert[i] = w_char;
     }
-    void testInvertStringChar()
-	{
-		char* w_charPtr = "jeanb"; // when i do this, i just set a pointer to string
-		                           // problem we have a pointer to a string and not a
-		                           // not a string which is an array of char (iterable)
-		char* w_charAlloc = new char[6]{"jeanb"}; // we have an array of char (string)
-		invertStr(w_charAlloc);
-		std::cout << "Test inverting a char pointer with allocated is: " << w_charAlloc << "\n";
-		delete [] w_charAlloc;
-		std::string w_teststrInv("jeanb");
-		char w_charArr[6] = "jeanb";
-		invertStr(w_charArr);
-		std::cout << "Inverted arrays of char is: " << w_charArr << "\n";
-		invertStr(const_cast<char*>(w_teststrInv.c_str()));
-		std::cout << "Inverted string is: " << w_teststrInv << "\n";
-	}
 
-   vs11::SomeClass somefunction()
+    cout << "We just finished to invert the string\n";
+}
+
+void testInvertStringChar()
+{
+    char *w_charPtr = "jeanb";                // when i do this, i just set a pointer to string
+                                              // problem we have a pointer to a string and not a
+                                              // not a string which is an array of char (iterable)
+    char *w_charAlloc = new char[6]{"jeanb"}; // we have an array of char (string)
+    invertStr(w_charAlloc);
+    std::cout << "Test inverting a char pointer with allocated is: " << w_charAlloc << "\n";
+    delete[] w_charAlloc;
+    std::string w_teststrInv("jeanb");
+    char w_charArr[6] = "jeanb";
+    invertStr(w_charArr);
+    std::cout << "Inverted arrays of char is: " << w_charArr << "\n";
+    invertStr(const_cast<char *>(w_teststrInv.c_str()));
+    std::cout << "Inverted string is: " << w_teststrInv << "\n";
+}
+
+// Just want to check the conversion from C string to myStringClass
+// when calling checkTmpObj("asdsafd"); const char* implicit conversion
+// we pass as arg a C-string but expect myStringClass
+// it has a ctor that takes C-string and convert it to myStringClass
+// but need to create a tmp object? is what happens?
+void checkTmpObj(const vs15::myStringClass &aStr)
+{
+    std::cout << "We are in the checkTmpobj() function\n";
+    //just a test about print char pointer
+    const char *w_checkPrint = "abcdef";
+    std::cout << w_checkPrint << "\n"; // print char directly
+}
+
+std::string getFruitVite( unsigned val)
+{
+    // declare 4 elements but initialize with 5, error too many initializer
+    std::array<std::string, 4> fruitsDispo{ "Pas bon fruit", "Banane", "Pomme", "pas bon fruit"/*, "Poire"*/};
+    if( val < fruitsDispo.size())
+        return fruitsDispo[val];
+
+    return fruitsDispo[0];
+}
+
+std::vector<std::string>& GetAllUnsignedShorts()
+{
+    // actually u should use reserve for memory managemnet
+    // here we have a vector of 65536 element initialized to zero
+    // but pushing back u just add element at the end of the vector and u endup with twice as much element
+   static std::vector<std::string> tableau(65536);      // reserve space!  environ 1.5 meg!!!
+   if( tableau.empty())
    {
-	   vs11::SomeClass myClass;
-	   return myClass;
+       for( auto i = 0; i < 65536; ++i) //i++ initially avoid temp object 
+         tableau.push_back( std::to_string(i));
    }
+   return tableau;
+}
+
+std::string IntToString1( unsigned short val)
+{
+     static const std::vector<std::string>& tableau =  GetAllUnsignedShorts();     // first time only init
+     return tableau[val];    // constant time!!!!   so we think!
+}
+
+//vs:
+std::string IntToString2( unsigned short val)
+{
+     return std::to_string(val); // does it call move ctor of string avoid temporary object creation from copy?
+}
+
+void myFuncByVal( vs15::Classvs15 aParam) 
+{
+    std::cout << "Pass arg by value\n";  // param is initialized by passed argument
+}
+
+vs15::Classvs15 myFuncRetVal()
+{ 
+    return vs15::Classvs15 {}; // return temporary (no call to move ctor)
+}
+
+// Some class test brain storming
+// A Simple C++ program to compute sum of digits in numbers from 1 to n
+
+// forward declaration 
+bool has4(int x, int digit2Cmp);
+
+// Returns sum of all digits in numbers from 1 to n
+int countNumbersWith4(int n)
+{
+  int result = 0; // initialize result
+
+  // One by one compute sum of digits in every number from
+  // 1 to n
+  for( auto i = 1; i <= n; ++i)
+    result += has4(i,4) ? 1 : 0;
+
+  return result;
+}
+
+// A utility function to compute sum of digits in a
+// given number x
+bool has4( int x4, int digit2Cmp)
+{
+  while( x4 != 0)
+  {
+    // debug purpose
+    auto res = x4 % 10;
+
+    if( x4 % 10 == digit2Cmp)
+      return true;
+
+    x4 = x4 / 10;
+  }
+
+  return false;
+}
 
 // =======================================================
 //
@@ -87,90 +192,83 @@ void someMS(int* aX);
 
 int main()
 {
-   int* w_y = new int(20);
-   vs11::someMS(w_y);
-   std::cout << "Value of y is: " << *w_y << "\n";
+    // auto is pointer type? yes it does!!
+    auto p = new char[20];  
+    p[0] = 'a'; // do i need to delete?
+    std::cout << "auto pointer value is: " << *p << "\n"; 
+    if( nullptr != p) { delete p; p = nullptr;}
+#if 1
+    // copy elison C++17 (copy/move ctor deleted it should not compile, it is!!)
+    // allowed move only and copy ctor deleted, it compile and works, but never
+    // the move ctor is called but it needs to exist (below casess with temporaries).
+    myFuncByVal( vs15::Classvs15 {});            // use temporary to initalize param
+    vs15::Classvs15 w_checkRet = myFuncRetVal(); // use returned temporary to initialize w_chekRet
+    myFuncByVal( std::move(myFuncRetVal()));                 // use returned temporary to initialize param
 
-   // Testing boost library cast operator
-   int aa=1;
-   try
-   {
-       float bb = boost::numeric_cast<float>(aa);
-   }
-   catch( const boost::bad_numeric_cast& e)
-   {
-       std::cerr << e.what() << '\n';
-   }
-   // some sanity check
-   std::cout << "integer value is: " << aa << "\n";
-   std::cout << "float value is: " << aa << "\n";
+    vs15::Classvs15 w_mvClazz = std::move(w_checkRet);
+#endif
 
-   //
-   // Testing our library (numeircal basic type) 
-   //
-   
-   // Base numerical library type
-   std::cout << "Test linking with BaseNumTypes library\n";
-   const double test = basenum::PhysicalConstant::sGravity;
-   std::cout << "Gravity value is: " << test << "\n";
+    auto w_fruitRet = getFruitVite(4);
+    // create a vector of 5 elements initiated to 0
+    std::vector<double> w_vec(5);
+    const auto w_siz = w_vec.size();
+    w_vec.push_back(2);
+    assert(6==w_vec.size());
+    // brace initialization vector of one element set to 5? is that true?
+    // it sure is!! vector of size 1 with value 5
+    std::vector<double> w_braceVec {5};
+    assert(1==w_braceVec.size());
+    std::cout << "Vector value is: " << w_braceVec[0] << std::endl;
 
-   // create a grid with E. McNeil discretization (dx=10., x0=0, xN=1000)
-   // Node index from i=1,..,100
-   std::shared_ptr<jb::gridLattice> w_grid = // E McNeil discretization as default
-	   std::make_shared<jb::gridLattice>( std::string("d=1 [0,1000] [1:100]"));
+    const char w_ch[] = "eqdsadsadwasdrwer";
+    const char* w_chptr = "rwer";
+    auto chk1 = sizeof(w_ch); // sizeof of an array 
+    auto chk2 = sizeof(w_chptr); // sizeof of a pointer, 8 on x64 architecture
+    auto chk11 = ::strlen(w_ch);
+    auto chk12 = ::strlen(w_chptr);
+    // char* w_strDup = ::strdup(w_chptr);
+    // free(w_strDup);
+ 
+    // Tmx string
+    // vs15::TmxString w_jeanTest; // empty string as default
+    // vs15::TmxString w_cpyJeanStr = w_jeanTest; // copy ctor
+    // std::cout << "Jean Tmx test string " << w_cpyJeanStr.c_str() << "\n";
+    // vs15::TmxString w_ctor("JeaanBel");
+   // (w_jeanTest = w_ctor) = w_cpyJeanStr = "sasd";
 
-   // checking some values (x=0.)
-   const double checkXmin = w_grid->xMin(1); //one dimensional
-   auto checkXmax = w_grid->xMax(1); //no need
+    vs15::myStringClass w_testStr("asdasd"); // const char[]
+    std::cout << "String is " << w_testStr.data() << "\n";
+    vs15::myStringClass w_cpyStr = w_testStr;
+    std::cout << "Copy string is: " << w_cpyStr.data() << "\n";
 
-   // create a scalar field for testing our VSCode environment
-   std::shared_ptr<jb::scalarField> w_U12( new jb::scalarField(w_grid, std::string("A")));
-   const std::string w_fieldName = w_U12->name();
-   if( !w_fieldName.empty())
-   {
-	   std::cout << "Filed name is : " << w_fieldName << "\n"; 
-   }
-   // checking default values of our scalar field
-   jb::RealNumArray<real> myValArray = w_U12->values();
+    // call with a const char it shall create a temporary object
+    // for the implicit conversion to myStringClass  
+    checkTmpObj("Char2Str"); // const char* 
+
+    // Numerical library test/validation
+    SfxType::testScalarField();
+
+    // does it call move ctor? yes it does since we have a rvalue 
+    // (call function) return by value create a temporary object
+    vs15::MoveTest w_checCpy = cpp11::checkSomeNvFeatures();
+
+    // return smart pointer (unique by move semantic)
+    auto w_uniqArr = vs11::retUniquePtrArray();
+    for( auto i = 0; i < 5; i++) // assume 5 elements
+    {
+        std::cout << "Array value is: " << w_uniqArr[i] << "\n"; 
+    }
+  
+//    vs11::testBase();
+    // vs11::CtorInit();
+    // vs11::validateMStest();
+    // std::cout << "Finished MS test" <<"\n";
+
+ //  vs11::SomeClass cpyCall = somefunction();
+ //  int staVar = cpyCall.getStaticVar();
 
    // default ctor 
-   std::shared_ptr<vs11::SomeClass> w_testCpy;
-   
-   // numerical array for dfaast floating point computation
-   std::valarray<double> w_testVarray(0.,10);
-   auto checkIter = begin(w_testVarray);
-
-   // Create scalar field for the A-variable
-   // smart pointer
-   //    elgo_ptr<int> myElgoPtr(); // default implementation with null ptr
-   //    // checking support comparison operator
-   //    if( myElgoPtr != nullptr)
-   //    {
-   // 	   std::cout << "Elgo smart pointer support comparison op\n";
-   //    }
-
-   vs11::SomeClass cpyCall = somefunction();
-   int staVar = cpyCall.getStaticVar();
-   //   using namespace std;
-
-   //  std::cout << "Starting tetsing with VSCode, continuing to configure my environment\n";
-
-   // For measuring the execution time of a piece of code,
-   // we can use the now() function:
-   // auto start = chrono::steady_clock::now();
-
-    //
-    //  Insert the code that will be timed
-    //
-    //auto end = chrono::steady_clock::now();//
-
-    // Store the time difference between start and end
-    //auto diff = end - start;
-
-	// can now include boost header
-//	const double myDbl=0.3;
-//	const int dbl2int = boost::numeric_cast<int>(myDbl);
-	//std::cout << "i surely can\n";
+   //std::shared_ptr<vs11::SomeClass> w_testCpy(nullptr);
 
 	// some test about casting down hierarchy (casting base)
 //	vs11::testClassBond();
@@ -180,68 +278,22 @@ int main()
  //   vs11::testInitialization();
 
     // Quiz test
-   // vs11::testMvCall();
+    vs11::testMvCall();
  //   vs11::testBindMechanism();
  //   vs11::testBase();
 
-  //  vs11::StaticVarTest w_checkCall;
-  //  vs11::StaticVarTest::m_sVar = 2;
-
- //   std::cout << "Starting debugging with VSCode\n";
-
     // not sure i do understand the difference between them
 	// what we should do? new notation or old one?
+    // braces initialization is call direct list initialization
+    // uniform initialization from C++11 and ensure zero initalization
+    // The second one is the usual initalization (default ctor call)
+    // and set to zero, should prefer the new braces 
     int ii = {}; // what we do exactly? call a ctor? default one
     int jj = int(); // default initialization
    // int kk;
 
   //vs1::testingShardPtr();
 //    vs1::testToAddFile();
-
-	// 
-	const char* const w_myString="jean";
-	
-	// some test with constant expression
-	size_t w_sizeStr = ::strnlen_s(w_myString,5);
-
-	// i am not sure what a constant expression is exactly
-	// see  appendix of Wilson book about C++ Concurrency
-	// below an example of us of the constant expression usage 
-	constexpr int w_intExpr = 2; // C++11
-	constexpr unsigned w_arraySize = 5;
-	unsigned w_arrSize = 4;
-	char w_myArray[w_arraySize];
-	unsigned i = 0;
-	w_myArray[i++] = 'a';
-
-	//char w_anotherArray[w_arrSize];  not a constant expression (compile error)
-
-	std::cout << "Testing VS2015 new setup\n";
-
-	// create an alias (typedef is now deprecated)
-	using ptr2int = std::unique_ptr<int*>; // smart pointer
-
-	// good practice is  to use the make_unique utility (see Scott Meyer's book)
-	ptr2int w_testMakeUnique = std::make_unique<int*>(/*new int*/);
-	if( w_testMakeUnique)
-	{
-		std::cout << "We have a unique pointer declared with an alias\n";
-	}
-
-	std::cout << "make unique supported with vs2015\n";
-
-	// check if we can list initializer 
-	std::vector<int> w_listVec = {1,2,43,4,5 };
-	if( w_listVec.size()==5)
-	{
-		std::for_each( std::begin(w_listVec), std::end(w_listVec), 
-			[](int aInt2Pritnt) 
-		{
-			std::cout << "Value is:" << aInt2Pritnt << "\n"; 
-		});
-	}
-
-    std::cout << "Hello World!";
 
 	// returning safely from main application 
 	return EXIT_SUCCESS;

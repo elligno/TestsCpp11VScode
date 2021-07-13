@@ -26,4 +26,30 @@ namespace vs11
         public:
         double Coupon() {return 1.2;}
     };
+
+    // class Bus 
+    // {
+    //   public: // protected cannot be accessed Bus::Driver
+    //     class Driver
+    //     {
+    //         public:
+    //         std::string m_name;
+    //     };
+    //   public:
+    //     static Driver* createDriver()
+    //     { return new Driver();}
+    //   private:
+    //     int seats;
+    // };
+
+    // class Base { 
+    //     public:
+    //     void func() {std::cout << "Base class func() method\n";}
+    // };
+    // class Derived : public Base 
+    // {
+    //     public:
+    //     void func() {std::cout <<}
+    // }
+
 } // End of namespace

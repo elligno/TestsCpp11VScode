@@ -20,12 +20,12 @@ namespace vs11
 
    SomeClass::SomeClass( const SomeClass& aOther)
    {
-     std::cout << "we are in copy ctor\n";
+     std::cout << "we are in SomeClass copy ctor\n";
    }
 
    SomeClass &SomeClass::operator=(const SomeClass &aOther)
    {
-     std::cout << "we are in the assignment ctor\n";
+     std::cout << "we are in the SomeClass assignment ctor\n";
      return *this;
    }
 } // End of namespace

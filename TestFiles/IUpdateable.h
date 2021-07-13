@@ -13,8 +13,10 @@
 
 namespace aa 
 {
-	// interface for COM mechanism support
-	//
+	/**
+	 * @brief Interface for COM mechanism support.
+	 * 
+	 */
 	class ITestAccess 
 	{
 	public:
@@ -22,7 +24,10 @@ namespace aa
         virtual void* getInterface( const std::string& aInterface)=0;
 	};
 
-	// some interface
+	/**
+	 * @brief Implement property that is updateable
+	 * 
+	 */
 	class IUpdateable
 	{
 	public:
@@ -36,13 +41,21 @@ namespace aa
 	private:
     };
 
-	class IDisplayable 
+	/**
+     * @brief Implement property that is displayeable
+     * 
+    */
+	class IDisplayable
 	{
 	public:
 		virtual void display() = 0; 
 	private:
 	};
 
+    /**
+     * @brief Implement property that is conservative 
+     * 
+    */
 	class IConservative 
 	{
 	public:
@@ -50,6 +63,10 @@ namespace aa
 	private:
 	};
 
+    /**
+     * @brief System simulation type
+     * 
+     */
 	class IType 
 	{
 	public:

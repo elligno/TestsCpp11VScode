@@ -1,29 +1,26 @@
-
-//////////////////////////////////////////////////////////////////////////
-//
-//  FILE: Swe_Singleton.hpp
-
-#ifndef singleton_HPP
-#define singleton_HPP
+#pragma once
 
 // C++ includes
 #include <iostream>
 #include <cstddef>
-// boost include
-#include <boost/noncopyable.hpp>
 
 namespace emcil
 {
-	// 
-	// Global instance of the application
-	// 
+	/**
+	 * @brief Base class for global instance of the application
+	 * 
+	 */
 	template<class T>
-	class Singleton : boost::noncopyable // private copy and  
-	{                                    // assignment ctor
+	class Singleton 
+	{               
 	  public:
 		  // some methods 
 		  static T* instance();
 		  void release();
+
+		  // copy and assignment denied
+		  Singleton(const Singleton&)=delete;
+		  Singleton& operator= (const Singleton&)=delete;
 	  protected:
 
 		  // We want to prevent of using them from client side
@@ -71,4 +68,3 @@ namespace emcil
 		m_singleton = nullptr;
 	}
 }  // End of namespace
-#endif  // Include guard

@@ -1,10 +1,5 @@
 
-//  Author: Jean Belanger (Elligno inc.)
-//  Date of creation: unknown
-//  Revision history:
-
-#ifndef testsfxibinterface_H
-#define testsfxibinterface_H
+#pragma once
 
 // app. include (i am not sure what i want to do)
 #include "testSfx_Provider.h"
@@ -76,4 +71,3 @@ namespace testSfx
 	private:
 	};
 } // End of namespace 
-#endif // Include guard

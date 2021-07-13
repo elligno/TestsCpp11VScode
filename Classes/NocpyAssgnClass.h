@@ -16,7 +16,7 @@ namespace vs15
 		NocpyAssgnClass() = default;
 		
 		// using constant expression, means evaluated at compile time
-		constexpr NocpyAssgnClass(unsigned aInt,float aFloat) 
+		constexpr NocpyAssgnClass( unsigned aInt,float aFloat) 
 		: m_uint32(aInt),m_flt32(aFloat) {}
 
 		// Note: don't need to do that i mean to make it private
@@ -31,9 +31,8 @@ namespace vs15
 		// Note: cannot declare in the cpp file, because if we declare 
 		// as a constant expression
 		constexpr float getFloat32() const { return m_flt32; }
-		void addFloat(const float aFloat);
+		void addFloat( const float aFloat);
 	private:
-
 		// don't need to initialize it in the ctor, no duplicate initialization
 		const unsigned m_uint32 = 23;
 		float m_flt32 = 2.1f;

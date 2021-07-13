@@ -28,19 +28,55 @@ namespace vs11
         options
     };
 
+    // scoped enum
+    enum class REG11 
+    {
+        stocks,
+        bonds
+    };
+    enum class LTC11 
+    {
+        swaps,
+        swaptions
+    }; 
+
+  //  int stocks {};
+
+    void enumFunc( int aInt)
+    {
+        std::cout << "Enum test as args\n";
+    //    REG::bonds w_checkEnum = aInt;
+    }
+    void enumFunc( REG11 aEnum)
+    {
+      int w_enumCast = static_cast<int>(REG11::stocks);
+    }
+
+    //void enumFunc()
     void testEnum()
     {
         // Which are valid operations?
         REG team1;
-    //    LTC team2;
-    //    DRV team3;
+     //   LTC team2;
+     //   DRV team3;
 
         // team2=1;  not valid cannot assign an int
         //team3=options+futures; not valid cannot assigned int to DRV
-        team1 = bonds;
+        team1 = bonds; // global scope
         
         // team1=futures; not valid cannot asign DRV to REG
         team1 = stocks;
+
+        REG11 team11;
+        team11 = REG11::bonds; // scoped enum
+
+        // can i do that?
+        enumFunc( REG::bonds); // implicit conversion to int
+        //enumFunc( REG11::bonds);  scoped enum implicit conversion not allowed
+
+        // move semantic
+        move_only m1;
+    //    move_only m2(m1); cannot copy is deleted function
    }
 
    void testClassBond()
@@ -54,7 +90,7 @@ namespace vs11
        Bond *bp;
        double uniqueValue;
 
-       for(int i=0;i<3;++i)
+       for( auto i=0;i<3;++i)
        {
            // add line of code here (these are the one that execute unique functionality of each class)
            bp = w_bonds[i];
@@ -98,7 +134,7 @@ namespace vs11
    {
        Derived objDerived;
        // calling func() of base class through an instance of derived
-       // i did not we could do that!!
+       // i did know we could do that!!
        objDerived.Base::func();
 
        // Alias test
@@ -120,7 +156,7 @@ namespace vs11
    }
    void printCity( const std::string& aCity)
    {
-       std::cout << "We are in the printCity\n";
+       std::cout << "The city is" << aCity << "\n";
    }
    void printCity( std::string&& aCity)
    {
@@ -144,9 +180,9 @@ namespace vs11
        };
 
        // templated function
-       fun(1,2.0,"bukle my shoe");
-       fun("silly string");
-       fun(1,2,3,4,5);
+       fun( 1,2.0,"bukle my shoe");
+       fun( "silly string");
+       fun( 1,2,3,4,5);
       // fun({1,2,3,4,5});
 
        char* arrChar = new char[100]; // 100 bytes on the free store
@@ -156,21 +192,28 @@ namespace vs11
        char* sizOf = (char*)malloc(100*sizeof(char));  //      
        std::cout << "Byte allocated on the heap is: " << sizeof(sizOf) << "\n";
 
-       float* beginningsalary = new float();
+       float* beginningsalary = new float(); // zero initialization
        std::cout << *beginningsalary << "\n";
-       float* endingSalary = new float;
+       float* endingSalary = new float; // garbage as default value
        std::cout << *endingSalary << "\n";
 
-       int* feet = new int[10]();
+       int* feet = new int[10](); // zero initialization
        std::cout << feet[0] << " " << feet[4] << " " <<feet[6] <<"\n";
        
-       int* inches = new int[10];
+       int* inches = new int[10]; // garbage as default value
        std::cout << *inches << "\n";
        std::cout << inches[0] << " " << inches[4] << " " << inches[6] <<"\n";
 
-       historyStudent* student1 = new historyStudent;
+       historyStudent* student1 = new historyStudent; // garbage as default value
        std::cout << student1->id << " " << student1->gpa  << "\n";
-       historyStudent* student2 = new historyStudent();  
+       historyStudent* student2 = new historyStudent();  // zero member intialization
        std::cout << student2->id << " " << student2->gpa  << "\n";
+   }
+
+   void useBus()
+   {
+       // need to be public (protected)
+       Bus::Driver* driver = Bus::createDriver();
+       driver->m_name = "addsa";
    }
 } // End of namespace 
