@@ -74,9 +74,6 @@ namespace SfxType
         assert( 0. == myRealArray[1]);
         assert( 0. == myRealArray[5]);
 
-        // is that make sense?
- //       std::unique_ptr<double[]> w_checkOp {new double[10]};
-
         // create a real array to initialize the scalarField
         // Reminder: numerical array indexing element from 1,..,N
        SfxNum::RealNumArray<double>* w_realArray = 
