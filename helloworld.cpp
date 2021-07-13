@@ -6,11 +6,6 @@
 #include <valarray> // numerical array (efficiency)
 #include <array>
 
-//#include <cstdlib>
-//#include <chrono>
-// STL includes
-//#include <vector>
-//#include <algorithm>
 // boost includes
 #include <boost/cast.hpp>
 // test include
