@@ -136,8 +136,6 @@ namespace SfxType
         w_scalarFptr.reset( new SfxNum::scalarField { w_gridTest, std::string("Test smart")});
         w_scalarFptr = w_U1; // assignment smart pointer (copy scalarField)
 #endif
-// do some clean-up avoid leak
-   //     delete[] myRealArray;
         std::cout << "Leaving test numerical stuff\n";
     }
 } // End of namespace
