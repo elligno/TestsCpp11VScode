@@ -16,12 +16,12 @@ namespace aa
 	{
 	public:	  
 		static T& getSingleton();
-	protected:
-		// Default constructor
-		TestSingleton();
         // not allowed to copy and assign
 		TestSingleton(const TestSingleton&)=delete;
 		TestSingleton& operator= (const TestSingleton&)=delete;
+	protected:
+		// Default constructor
+		TestSingleton();
 
 		// Force destructor to be virtual (It is a pure virtual function, 
 		// it means it is left to derived class to implement the destructor).
@@ -50,7 +50,7 @@ namespace aa
 	// _______________________________________________________________________
 	//
 	template< typename T> inline 
-		T & TestSingleton<T>::getSingleton()
+		T& TestSingleton<T>::getSingleton()
 	{
 		static T wSingleton; // persistence through the application 
 		                     // instead of dynamically allocate it 

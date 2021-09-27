@@ -53,7 +53,7 @@ int maxProfit( int price[], int start, int end)
 
     return profit;
 }
- 
+  
 // Driver code
 int testMaxProfit()
 {

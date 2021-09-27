@@ -24,10 +24,10 @@ namespace emcil
 	  protected:
 
 		  // We want to prevent of using them from client side
-		  Singleton();
+		  Singleton()=default;
 
 		  // Shouldn't the destructor be virtual?
-		  virtual ~Singleton();
+		  virtual ~Singleton()=default;
 	  private:
 		  // The sole instance of the class
 		  static T* m_singleton;
@@ -36,16 +36,16 @@ namespace emcil
 	// initialize static variable 
 	template<class T> T* Singleton<T>::m_singleton = nullptr;
 
-	template<class T>
-	Singleton<T>::Singleton()
-	{}
+	// template<class T>
+	// Singleton<T>::Singleton()
+	// {}
 
-	template<class T>
-	Singleton<T>::~Singleton()
-	{
-		// debugging purpose
-		std::cout << "We are in the Singleton dtor\n"; 
-	}
+	// template<class T>
+	// Singleton<T>::~Singleton()
+	// {
+	// 	// debugging purpose
+	// 	std::cout << "We are in the Singleton dtor\n"; 
+	// }
 
 	template<class T>
 	T* Singleton<T>::instance()

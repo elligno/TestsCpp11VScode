@@ -11,10 +11,10 @@ namespace vs11
     // https://www.codeproject.com/articles/397492/move-semantics-and-perfect-forwarding-in-cplusplus
 
     /**
-     * @brief a class which defines an array of double values without move semantics.
+     * @brief A class which defines an array of double values without move semantics.
      * One issue is particular important when writing a move constructor and a move assignment operator: 
      * the contents of the parameter, which is being moved, should remain valid for its further destruction. 
-     * There are two approaches, which can be used here:
+     * There are two approach es, which can be used here:
      *
      * (1) swapping its contents with the target object (as in case of assignment);
      *

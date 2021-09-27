@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <valarray> // numerical array (efficiency)
 #include <array>
+#include <set>
 
 // boost includes
 #include <boost/cast.hpp>
@@ -30,11 +31,13 @@ namespace vs11
     void testClassBond();
     std::unique_ptr<int[]> retUniquePtrArray();
     void CtorInit();
+    void findDuplicateTest();
 } //vs11
 
 namespace cpp11  
 {
     vs15::MoveTest checkSomeNvFeatures();
+    void testSmartPointer();
 }//cpp11
 
 namespace SfxType 
@@ -187,6 +190,20 @@ bool has4( int x4, int digit2Cmp)
 
 int main()
 {
+    #if 0
+    std::array<int,10> w_arr1 { 1,2,3,3,4,7,1,4,5,6};
+    std::array<int,10> w_arr2 { 1,2,3,4,3,2,7,7,8,9};
+
+    std::set<int> w_sortedRng1( w_arr1.cbegin(), w_arr1.cend());
+    std::set<int> w_sortedRng2( w_arr2.cbegin(), w_arr2.cend());
+
+    std::vector<int> w_vecRes; w_vecRes.reserve(5);
+    std::set_intersection( w_sortedRng1.cbegin(), w_sortedRng1.cend(),
+     w_sortedRng2.cbegin(), w_sortedRng2.cend(), std::back_inserter(w_vecRes));
+#endif
+     // 
+     vs11::findDuplicateTest();
+
     // auto is pointer type? yes it does!!
     auto p = new char[20];  
     p[0] = 'a'; // do i need to delete?
@@ -206,9 +223,10 @@ int main()
     auto w_fruitRet = getFruitVite(4);
     // create a vector of 5 elements initiated to 0
     std::vector<double> w_vec(5);
-    const auto w_siz = w_vec.size();
+   // const auto w_siz = w_vec.size(); error about initalization of const w_siz 
     w_vec.push_back(2);
-    assert(6==w_vec.size());
+    assert( 6 == w_vec.size());
+    
     // brace initialization vector of one element set to 5? is that true?
     // it sure is!! vector of size 1 with value 5
     std::vector<double> w_braceVec {5};

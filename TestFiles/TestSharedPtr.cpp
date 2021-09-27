@@ -36,20 +36,26 @@ namespace cpp11
 	{
 		using namespace std;
 
-		// create a boost smart pointer (call default ctor of int, 
+		// create a std smart pointer (call default ctor of int, 
 		// set init value to 0). Better to use the make_shared utility
 		// than ... for this reason make sure object is constructed 
 		// (need more test) and it's faster
 		// it seems that the make_shared call default ctor to ensure
 		// that type is constructed completely, not sure but looks like it!! 
 		shared_ptr<int> w_testShPtr = make_shared<int>(); // init to zero?
-		shared_ptr<int> w_px(new int{}); // init to zero (add parenthese)
+		shared_ptr<int> w_px(new int {}); // init to zero (add parenthese)
         int w_testVal = *w_testShPtr;    // 0
 		int w_valx = *w_px;              // some weird value (probably garbage) now should be zero
 		
 		// check count of the smart pointer
 		size_t w_checkCount = w_testShPtr.use_count();
 		assert( w_testShPtr.use_count() == 1); // at creation
+
+        shared_ptr<int> w_testCpy = w_testShPtr;
+		// what is the count of w_testShPtr? someone else is using it
+		// must be == 2? isn't? 
+        assert( 1 == w_testCpy.use_count());
+		assert( 2 == w_testShPtr.use_count());
 
 		// set some initial values
 		int* w_intPtr = w_testShPtr.get();  // pointer
@@ -61,8 +67,8 @@ namespace cpp11
 
 		// change it but with pointer
 	    assert(*w_testShPtr == 0);
-		*w_intPtr=45; // changing smart pointer (object) value
-		assert(*w_testShPtr.get() == 45);
+		*w_intPtr = 45; // changing smart pointer (object) value
+		assert( *w_testShPtr.get() == 45);
 
 		//	assert(w_checkPtr!=nullptr);
 		// allocate memory to store 5 values (int) 
@@ -102,7 +108,7 @@ namespace cpp11
 		assert(*w_cpyPtr == 12);
 
 		// check reset stuff
-		int* w_newInt = new int{};
+		int* w_newInt = new int {};
 		int* w_tmpSptr=w_testShPtr.get();
 		w_testShPtr.reset( w_newInt);
 		int* w_getPtr = w_testShPtr.get();

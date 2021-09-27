@@ -4,33 +4,38 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <array>
+#include <set>
 
-// int fiabonk() {
-//     int n, t1 = 0, t2 = 1, nextTerm = 0;
 
-//     // cout << "Enter the number of terms: ";
-//     // cin >> n;
+int fiabonk() 
+{
+    int n, t1 = 0, t2 = 1, nextTerm = 0;
 
-//    // cout << "Fibonacci Series: ";
+    // cout << "Enter the number of terms: ";
+    // cin >> n;
 
-//     for (int i = 1; i <= n; ++i) {
-//         // Prints the first two terms.
-//         if(i == 1) {
-//             cout << t1 << ", ";
-//             continue;
-//         }
-//         if(i == 2) {
-//             cout << t2 << ", ";
-//             continue;
-//         }
-//         nextTerm = t1 + t2;
-//         t1 = t2;
-//         t2 = nextTerm;
+   // cout << "Fibonacci Series: ";
+
+    for (int i = 1; i <= n; ++i) {
+        // Prints the first two terms.
+        if(i == 1) {
+            std::cout << t1 << ", ";
+            continue;
+        }
+        if(i == 2) {
+            std::cout << t2 << ", ";
+            continue;
+        }
+        nextTerm = t1 + t2;
+        t1 = t2;
+        t2 = nextTerm;
         
-//         cout << nextTerm << ", ";
-//     }
-//     return 0;
-// }
+        std::cout << nextTerm << ", ";
+    }
+    return 0;
+}
+
 // class Date;
 // class TradeClass 
 // {
@@ -233,7 +238,7 @@ namespace vs11
         auto numDupl = w_vecOrg.size() - w_vecUniq.size();
         std::vector<int> w_duplElem; // direct list initializer {8} 1 elem set to 8 
         w_duplElem.reserve(numDupl);   // be carefull when declaring vector
-        auto w_countDupl=0;
+        auto w_countDupl = 0;
         for( size_t i = 0; i < w_vecOrg.size(); i++)
         {
            auto numDup = std::count( w_vecOrg.begin(), w_vecOrg.end(), w_vecOrg[i]);
@@ -242,11 +247,11 @@ namespace vs11
                w_duplElem.push_back(w_vecOrg[i]);}
                ++w_countDupl; if(w_countDupl==3) break;
         }
-        for (auto i = 0; i < w_duplElem.size(); i++)
+        for( auto i = 0; i < w_duplElem.size(); i++)
         {
             std::cout << "Duplicate elem " << w_duplElem[i] << std::endl; 
         }
-    }
+    }//if
 
     //std::cout << "New end eleme : " << *endIter << std::endl;
 
@@ -267,4 +272,71 @@ namespace vs11
 
     vs11::validateMStest();
   }
-}
+
+   // MS interview questions (simplest way to find duplicate is to use set)
+   // I think the question was: having 2 sequences of number find duplicate
+   // or number that are in both sequence. Abopve i use some STL algorithms
+   // such as sort, unique and erase, but the simpliest way to do it is the following.
+  void findDuplicateTest()
+  {
+    std::array<int,10> w_arr1 { 1,2,3,3,4,7,1,4,5,6};
+    std::array<int,10> w_arr2 { 1,2,3,4,3,2,7,7,8,9};
+
+    std::set<int> w_sortedRng1( w_arr1.cbegin(), w_arr1.cend()); // unique element
+    std::set<int> w_sortedRng2( w_arr2.cbegin(), w_arr2.cend()); // unique element
+
+    std::vector<int> w_vecUniq; w_vecUniq.reserve(10);
+    std::set_intersection( w_sortedRng1.cbegin(), w_sortedRng1.cend(),
+                           w_sortedRng2.cbegin(), w_sortedRng2.cend(), std::back_inserter(w_vecUniq));
+
+    w_vecUniq.shrink_to_fit();
+
+     std::cout << "The following number are duplicate in both sequence\n";
+
+     for( auto val : w_vecUniq)
+     {
+       std::cout << val << std::endl;
+     }
+
+     // Can i do it with STL algorithm such as sort, unique and erase, i do think so     
+     std::vector<int> w_sortArr1{ w_arr1.cbegin(), w_arr1.cend()};
+     std::vector<int> w_sortArr2{ w_arr2.cbegin(), w_arr2.cend()};
+     std::sort( w_sortArr1.begin(), w_sortArr1.end()); 
+     std::sort( w_sortArr2.begin(), w_sortArr2.end());
+
+     // sanity check
+     if( std::is_sorted( w_sortArr1.cbegin(),w_sortArr1.cend()))
+     {
+       w_sortArr1.erase( std::unique( w_sortArr1.begin(), w_sortArr1.end()), w_sortArr1.cend());
+     }
+     if( std::is_sorted( w_sortArr2.cbegin(),w_sortArr2.cend()))
+     {
+       w_sortArr2.erase( std::unique( w_sortArr2.begin(), w_sortArr2.end()), w_sortArr2.cend());
+     }
+
+     std::vector<int> w_mergeSortVec; w_mergeSortVec.reserve(10);
+     std::merge( w_sortArr1.begin(),w_sortArr1.end(),
+         w_sortArr2.begin(),w_sortArr2.end(), std::back_inserter(w_mergeSortVec));
+
+     //std::set_intersection();
+ 
+    // std::vector<int> w_testAlgo; w_testAlgo.reserve(10);
+    // std::copy( std::unique( w_sortArr1.begin(), w_sortArr1.end()), 
+    //            w_sortArr1.cend(), std::back_inserter(w_testAlgo));
+
+     auto w_siz1 = w_sortArr1.size();
+     w_sortArr1.erase( std::unique( w_sortArr1.begin(), w_sortArr1.end()), w_sortArr1.cend());
+     auto w_siz2 = w_sortArr1.size();
+     w_sortArr2.erase( std::unique( w_sortArr2.begin(), w_sortArr2.end()), w_sortArr2.cend());
+
+    std::vector<int> w_mergeSortVec1; w_mergeSortVec1.reserve(10);
+     std::merge( w_sortArr1.begin(),w_sortArr1.end(),
+         w_sortArr2.begin(),w_sortArr2.end(), std::back_inserter(w_mergeSortVec1));
+
+    w_mergeSortVec1.shrink_to_fit();
+
+    // we need to remove duplicate or to check duplicate
+    
+     // remove all duplicate
+  }
+} // End of namespace

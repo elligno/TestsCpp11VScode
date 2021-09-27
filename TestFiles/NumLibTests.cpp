@@ -78,6 +78,8 @@ namespace SfxType
         // Reminder: numerical array indexing element from 1,..,N
        SfxNum::RealNumArray<double>* w_realArray = 
            new SfxNum::RealNumArray<double> { w_nbPtsTotal, myRealArray};
+        
+        // set scalar field data 
         w_U1->values(*w_realArray); // takes the ownership
 
         // call two-dimensional array indexing (i,j)
