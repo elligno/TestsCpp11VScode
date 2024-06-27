@@ -6,7 +6,8 @@ namespace vs11
     // TestClass implementatin
     //
 
-   TestClass::TestClass() {} 
+   TestClass::TestClass() {std::cout << "TestClass default ctor\n";} 
+   
     TestClass::TestClass(int aIntval, float aFloatval)
     : m_intVal(aIntval),
       m_floatVal(aFloatval)

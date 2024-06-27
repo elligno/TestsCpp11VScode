@@ -4,9 +4,10 @@
 #include <iostream>
 // boost range iterator library includes
 #include <boost/range/iterator_range.hpp>    // range iterator lib 
+#include "../Classes/valarrField.h"
 // Numeric library includes
 #include "jb_scalarField.h" // include grid lattice
-#include "Elgo_Ptr.hpp" // in house smart pointer impl
+//#include "Elgo_Ptr.hpp"  in house smart pointer impl
 #include "PhysCte.h" // some physical constant
 
 namespace SfxType 
@@ -131,10 +132,53 @@ namespace SfxType
 
         // initalize smart pointer empty  
         std::shared_ptr<SfxNum::scalarField> w_scalarFptr {nullptr}; //direct list initalization
-        auto w_nbCount = w_scalarFptr.unique(); //use_count == 1 
+        auto w_nbCount = w_scalarFptr.use_count(); //use_count == 1 
         w_scalarFptr.reset( new SfxNum::scalarField { w_gridTest, std::string("Test smart")});
         w_scalarFptr = w_U1; // assignment smart pointer (copy scalarField)
 #endif
         std::cout << "Leaving test numerical stuff\n";
+    }
+
+    void testValArrField1D()
+    {
+        std::cout << "Starting to test the valarray version of filed lattice\n";
+
+        // create a grid Node index from i=1,..,10 mean dx=0.1
+        // 10 grid nodes from i= 1,...,10 and x = 0.,...,1. result dx=0.1
+        auto w_grid = std::make_shared<vs11::gridLattice1D>( std::string{"d=1 [0,1] [1:10]"});
+
+       std::cout << *w_grid << "\n";
+
+       // checking some values (x=0.)
+        const auto checkXmin = w_grid->xMin(); //one dimensional
+        auto checkXmax = w_grid->xMax();       //no need
+        const auto w_dx = w_grid->Delta();
+        const auto w_baseIdx = w_grid->getBase(); // first dimension
+        assert( 0.1 == w_dx);
+  
+        std::cout << "Eing to test the valarray version of filed lattice\n";
+
+        // create a scalar field for testing our VSCode environment
+        std::shared_ptr<vs11::valarrField> w_U1 { new vs11::valarrField{ w_grid, std::string("A")}};
+        const auto w_fieldName = w_U1->name();
+        if( !w_fieldName.empty())
+        {
+            std::cout << "Field name is : " << w_fieldName << "\n";
+        }
+        vs11::valarrField w_u1{w_grid, std::string{"u1-field"}};
+        vs11::valarrField w_u2{w_grid, std::string{"u2-field"}};
+        auto& w_somVal = w_u2.values();
+        w_somVal[0]=1.2;
+        w_somVal[1]=0.2;
+        w_somVal[2]=2.5;
+        w_somVal[3]=1.32;
+        w_somVal[4]=1.2;
+        vs11::valarrField w_sum = w_u1+w_u2;
+        const auto& w_values = w_sum.values();
+        assert(10==w_values.size()); 
+
+        vs11::valarrField w_u3 {std::move(w_u2)};
+        auto w_u2siz = w_u2.values().size();
+        std::cout << "End testing\n";
     }
 } // End of namespace

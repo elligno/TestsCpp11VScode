@@ -14,6 +14,7 @@
 #include "Classes/myMoveClass.h"
 #include "Classes/myStringClass.h"
 #include "Classes/ClassVS15.h"
+#include "Classes/myClass.h"
 //#include "Classes/TmxString.h"
 
 // declaring some global function or variables
@@ -38,11 +39,13 @@ namespace cpp11
 {
     vs15::MoveTest checkSomeNvFeatures();
     void testSmartPointer();
+    void testShrPtrOwnerShip();
 }//cpp11
 
 namespace SfxType 
 {
     void testScalarField(); 
+    void testValArrField1D();
 }//SfxType
 
 namespace vs15 { int maxProfit( int price[], int start, int end);}
@@ -71,7 +74,7 @@ void invertStr(char *aStr2Invert)
 
 void testInvertStringChar()
 {
-    char *w_charPtr = "jeanb";                // when i do this, i just set a pointer to string
+    //char *w_charPtr = "jeanb";                 when i do this, i just set a pointer to string
                                               // problem we have a pointer to a string and not a
                                               // not a string which is an array of char (iterable)
     char *w_charAlloc = new char[6]{"jeanb"}; // we have an array of char (string)
@@ -190,7 +193,11 @@ bool has4( int x4, int digit2Cmp)
 
 int main()
 {
-    #if 0
+    std::cout << "Starting test of new version of scalarField\n";
+    SfxType::testValArrField1D();
+    std::cout << "End test of new version scalarField\n";
+
+ #if 0
     std::array<int,10> w_arr1 { 1,2,3,3,4,7,1,4,5,6};
     std::array<int,10> w_arr2 { 1,2,3,4,3,2,7,7,8,9};
 
@@ -201,6 +208,11 @@ int main()
     std::set_intersection( w_sortedRng1.cbegin(), w_sortedRng1.cend(),
      w_sortedRng2.cbegin(), w_sortedRng2.cend(), std::back_inserter(w_vecRes));
 #endif
+
+     // just test if default ctor of bzase class is call 
+     // when instantiate derived class
+     vs11::TestClass w_defCtorCall;
+
      // 
      vs11::findDuplicateTest();
 
@@ -215,7 +227,7 @@ int main()
     // the move ctor is called but it needs to exist (below casess with temporaries).
     myFuncByVal( vs15::Classvs15 {});            // use temporary to initalize param
     vs15::Classvs15 w_checkRet = myFuncRetVal(); // use returned temporary to initialize w_chekRet
-    myFuncByVal( std::move(myFuncRetVal()));                 // use returned temporary to initialize param
+    myFuncByVal( std::move(myFuncRetVal()));     // use returned temporary to initialize param
 
     vs15::Classvs15 w_mvClazz = std::move(w_checkRet);
 #endif

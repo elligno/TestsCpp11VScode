@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <functional>
 // boost include
-#include <boost/operators.hpp>
+//#include <boost/operators.hpp>
 // App include
 #include "gridLattice.h"
 
@@ -20,7 +20,7 @@ namespace vs11
 	 *    std valarray support modern C++ move semantic as well math operation supported 
 	 *    by such a function. 
 	 */
-    class valarrField : public boost::addable<valarrField> // operator+
+    class valarrField //: boost::addable<valarrField>  operator+
     {
  	public:
 		/**
@@ -30,15 +30,17 @@ namespace vs11
 		 * @param fieldname name description 
 		 * @return 
 		 */
-		valarrField( std::shared_ptr<gridLattice>& grid, 
+		valarrField( std::shared_ptr<gridLattice1D>& grid, 
 			         std::string fieldname);
 
+#if 0 //all those ctor are implicitly generated: copy and assignment, move and assign move
         /**
          * @brief Construct a new valarr Field object
          * 
          * @param aOther 
          */
 	    valarrField( const valarrField& aOther)=default;
+	
 		/**
 		 * @brief Assign new valarr field object
 		 * 
@@ -63,6 +65,7 @@ namespace vs11
 		 * @return valarrField& new created field  
 		 */
         valarrField& operator= ( valarrField&& aOther)=default;
+#endif //if 0
 
 		/**
 		 * @brief Enable access to grid-point values
@@ -75,10 +78,10 @@ namespace vs11
 		/**
 		 * @brief Enable access to the grid
 		 * 
-		 * @return gridLattice& 
+		 * @return gridLattice1D& 
 		 */
-		       gridLattice& grid()                   { return *m_gridLattice; }
-		const gridLattice& grid() const              { return *m_gridLattice; }
+		       gridLattice1D& grid()                   { return *m_gridLattice; }
+		const  gridLattice1D& grid() const             { return *m_gridLattice; }
 
         /**
          * @brief Field name description
@@ -99,24 +102,14 @@ namespace vs11
 		 * 
 		 * @return valarrField 
 		 */
-		valarrField operator- () const
-		{ 
-			std::valarray<double> w_retArray(m_gridPointValues->size());
-			std::transform( std::begin(*m_gridPointValues), std::end(*m_gridPointValues), 
-			     std::begin(w_retArray), std::negate<double> {});
-
-			valarrField w_retField = *this;
-			w_retField.values(w_retArray);
-
-			return w_retField;
-	    }
+		valarrField operator- () const;
 
 		/**
 		 * @brief Unary plus operator
 		 * 
 		 * @return valarrField 
 		 */
-        valarrField operator+ () const { return *this; }
+        valarrField operator+ () const;
 
         /**
          * @brief Math operation on field (add 2 field)
@@ -124,11 +117,7 @@ namespace vs11
          * @param aOther 
          * @return vector field
          */
-        valarrField& operator+= ( const valarrField& aOther)
-		{ 
-			*m_gridPointValues += aOther.values();
-			return *this;
-		}
+        valarrField& operator+= ( const valarrField& aOther);
 
         /**
          * @brief 
@@ -136,10 +125,7 @@ namespace vs11
          * @param aOther 
          * @return valarrField& 
          */
-		valarrField& operator-= ( const valarrField& aOther)
-		{
-			return *this += -aOther;
-		}
+		valarrField& operator-= ( const valarrField& aOther);
 
         /**
          * @brief 
@@ -149,11 +135,24 @@ namespace vs11
          */
 		valarrField& operator*= ( const valarrField& aOther);
 
+        /**
+         * @brief 
+         * 
+         * @param aOther 
+         * @return valarrField 
+         */
+		valarrField operator/= (const valarrField& aOther);
+
      //   valarrField operator+ ( const valarrField& aOther);
       private:
-        std::shared_ptr<gridLattice>           m_gridLattice;     /**<  */
-        std::shared_ptr<std::valarray<double>> m_gridPointValues; /**<  */
-		std::string                            m_fieldName;       /**<  */
+        std::shared_ptr<gridLattice1D>           m_gridLattice;     /**< shared grid*/
+        std::shared_ptr<std::valarray<double>> m_gridPointValues; /**< shared array (point values)*/
+		std::string                            m_fieldName;       /**< field name*/
     };
 
+    //
+	// Math operations on scalar field
+	//
+
+	valarrField operator+ (const valarrField& aF1, const valarrField& aF2);
 } // End of namespace

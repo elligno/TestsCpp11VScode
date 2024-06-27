@@ -17,7 +17,7 @@ namespace Btl
 	void printCont( const Cont& aCont2print)
 	{
 		// define a type
-		typename typedef Cont::const_iterator const_iterator;
+		typedef typename Cont::const_iterator const_iterator;
 
 		// initialize the iterator
 		const_iterator beg = aCont2print.begin();

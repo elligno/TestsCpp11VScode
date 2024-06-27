@@ -66,8 +66,8 @@ namespace aa
 		// Make this class a friend of the base class 
 		friend class TestSingleton<TestLogger>;
 	protected:
-		TestLogger();
-		~TestLogger();
+		TestLogger()=default;
+		~TestLogger()=default;
  
 	private:
 		mapofclass m_classInst;

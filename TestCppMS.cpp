@@ -174,7 +174,7 @@ template<typename T> class stack
 {
     void push( const T& aElem);
     void push( T&& aElem) noexcept;
-    bool pop();   
+    bool pop();    
     size_t size() const noexcept {return 0;}
     const T& top() const { return m_data.front();}
           T& top() { return m_data.front();}

@@ -53,6 +53,7 @@ namespace cpp11
     using UnaryDblFunc = std::function<double(double)>;
 
 	// can i do that? humm!! it's a wrapper (it compiles!!)
+	// is it a callable? not sure 
 	class myFunc : std::function<void(int)> 
 	{
 	public:
@@ -81,7 +82,7 @@ namespace cpp11
     using namespace boost::assign;
 
     // let's create a vector of data and apply it 
-    std::vector<int> w_vecInt = list_of(3)(2)(7)(2)(2);
+    std::vector<int> w_vecInt = {3,2,7,2,2}; //list_of(3)(2)(7)(2)(2);
     for (const int w_val : w_vecInt)
     {
       // call our unary function
@@ -95,7 +96,7 @@ namespace cpp11
      using namespace boost::assign;
 
     // let's create a vector of data and apply it 
-    std::vector<double> w_vecInt = list_of(3.3)(1.2)(7.12)(4.2)(8.2);
+    std::vector<double> w_vecInt = {3.3,1.2,7.12,4.2,8.2}; //list_of(3.3)(1.2)(7.12)(4.2)(8.2);
     for (const double w_val : w_vecInt)
     {
       // call our unary function
@@ -293,7 +294,7 @@ namespace cpp11
 //		BOOST_ASSERT( w_testPtrListOf.size() == 3 );
 		
 		// create a pair vector for testing
-		std::vector<Pair> w_vofpair = pair_list_of(1,2)(2,3)(21,5)(3,6);
+		std::vector<Pair> w_vofpair = {{1,2},{2,3},{21,5},{3,6}};//pair_list_of(1,2)(2,3)(21,5)(3,6);
 		std::list<Pair::first_type> w_keyList;
     // way to print the key of the pair element very efficiently
 		for( auto& first : w_vofpair | map_keys) // range loop
@@ -303,8 +304,8 @@ namespace cpp11
 		}
 		assert( w_keyList.size() == w_vofpair.size());
 
-		std::vector<int> start1 = list_of(1)(2)(3)(4)(5);
-		std::vector<int> start2 = list_of(10)(20)(30)(40)(50);
+		std::vector<int> start1 = {1,2,3,4,5};//list_of(1)(2)(3)(4)(5);
+		std::vector<int> start2 = {10,20,30,40,50}; //list_of(10)(20)(30)(40)(50);
 		std::vector<Pair> w_vecofpair; // just to make sure that we start with brand new vec
 		w_vofpair.reserve(start1.size()); // ...
 	  
@@ -356,7 +357,7 @@ namespace cpp11
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     // Initialize vector with list initializer (boost assign library)
-    std::vector<int> range1 = list_of(-1)(2)(5)(6)(-3);
+    std::vector<int> range1 = {-1,2,5,6,-3};//list_of(-1)(2)(5)(6)(-3);
     std::vector<int> w_res;
     w_res.reserve(5);
 
@@ -412,7 +413,7 @@ namespace cpp11
     testDbl2Unary(w_testBindArgs);
 
     // define another range another range 
-    vector<double> rangedbl1 = list_of(0.)(1.4)(8.3)(0.6)(-3.3);
+    vector<double> rangedbl1 = {0.,1.4,8.3,0.6,-3.3};//list_of(0.)(1.4)(8.3)(0.6)(-3.3);
     vector<double> rangedbl2(rangedbl1.size()); // store result 
     //rangedbl2.reserve(rangedbl1.size());
     
@@ -437,16 +438,16 @@ namespace cpp11
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     // convert 3 args function as a unary function and add it to the container
-    w_vecofFunc.push_back( bind(&testBindArg,_1,1.4,3.2)); // bind second and third arg
-    w_vecofFunc.push_back( bind(&testBindArg,1.2,3.2,_1)); // bind what??
-    w_vecofFunc.push_back( bind(&testBindArg,2.1,_1,3.2)); // what we do here
+    w_vecofFunc.push_back( bind( &testBindArg,_1,1.4,3.2)); // bind second and third arg
+    w_vecofFunc.push_back( bind( &testBindArg,1.2,3.2,_1)); // bind what??
+    w_vecofFunc.push_back( bind( &testBindArg,2.1,_1,3.2)); // what we do here
 
     // retrieve function from vector of function 
     func3args2one w_checkAgain = w_vecofFunc[0];
     w_checkAgain(0.5); // calling as a unary function
 
-    vector<double> w_rngDbl;
-    w_rngDbl += 0.2,1.6,2.3,9.2,4.; //list_of(0.2)(1.6)(2.3)(9.2)(4.);
+    vector w_rngDbl{0.2,1.6,2.3,9.2,4.};
+   // w_rngDbl += 0.2,1.6,2.3,9.2,4.; list_of(0.2)(1.6)(2.3)(9.2)(4.);
     
     vector<double> w_resDbl1;
     w_resDbl1.reserve(w_rngDbl.size());
@@ -473,7 +474,7 @@ namespace cpp11
 		
     // unless i miss something we shouldn't find anything
 		auto w_foundfPos = std::find_if( std::begin(w_vcInt), std::end(w_vcInt),
-			std::bind( std::greater<int>(),std::placeholders::_1,1));
+			std::bind( std::greater<int>{},std::placeholders::_1,1));
 		
     // just in case i really miss something (find_if algorithm as many stl algorithm)
 		// will return end if it doesn't succeed 
@@ -481,10 +482,10 @@ namespace cpp11
 		std::cout << "We did our test successfully and continue exploring\n";
     
     // that can be used with simple range
-    std::vector<double> w_rangeDbl1 = list_of(1.)(0.3)(3.2)(12.3)(-0.5);
+    std::vector<double> w_rangeDbl1 = {1.,0.3,3.2,12.3,-0.5};//list_of(1.)(0.3)(3.2)(12.3)(-0.5);
     std::vector<double> w_resDbl;
     w_resDbl.reserve(w_rangeDbl1.size());
-    std::transform( w_rangeDbl1.begin(),w_rangeDbl1.end(),std::back_inserter(w_res),
+    std::transform( w_rangeDbl1.begin(),w_rangeDbl1.end(),std::back_inserter(w_resDbl),
       w_testBindArgs);
 
     // i don't see why i can't (without the the parenthesis, i..e. ctor call)

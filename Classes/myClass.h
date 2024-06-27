@@ -2,6 +2,7 @@
 
 // C++ include
 #include <iostream>
+#include "SomeClass.h"
 
 namespace vs11 
 {
@@ -15,15 +16,17 @@ namespace vs11
         void printSelf() {}
     };
 
-    class TestClass 
+    class TestClass : public aa::BaseClass
     {
         public:
           TestClass();
+
           // Usage: TestClass myClass {{1,2.3} {2,4.12}};
           // is it correct?
           TestClass( int aIntval, float aFloatval);
           TestClass( const TestClass& aOther);
           TestClass& operator= ( const TestClass& aOther);
+          
           // setter/getter
           size_t length() const     {return m_length;}
           int getIntVal() const     {return m_intVal;}

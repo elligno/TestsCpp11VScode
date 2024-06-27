@@ -20,7 +20,7 @@ namespace aa
 	  m_intVal(0),
 	  m_floatVal(0.)
 	{
-		std::cout << "We are in the default ctor\n";
+		std::cout << "BaseClass default ctor\n";
 	}
 
 	// ________________________________________________________________

@@ -10,7 +10,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 // boost includes
 #include <boost/lambda/bind.hpp>  
-#include <boost/filesystem.hpp>      // boost file system utility
+//#include <filesystem>       std file system utility
 #include <boost/foreach.hpp>   
 // Boost string algorithm
 // #include <boost/algorithm/string.hpp>
