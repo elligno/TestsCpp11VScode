@@ -7,6 +7,9 @@
 #include <array>
 #include <set>
 
+// C++17
+#include <variant> // testing new feature
+
 // boost includes
 #include <boost/cast.hpp>
 // test include
@@ -50,6 +53,8 @@ namespace SfxType
 
 namespace vs15 { int maxProfit( int price[], int start, int end);}
 
+namespace cpp17 {void testStdFilesystem();}
+
 // signature should be char s[]??
 // because strlen(char*) is it the same as strlen(s[])?
 // i don't think so, need to check
@@ -64,7 +69,7 @@ void invertStr(char *aStr2Invert)
     // of the null terminated character for C string
     for (size_t i = 0, j = ::strlen(aStr2Invert) - 1; i < j; ++i, --j)
     {
-        int w_char = aStr2Invert[j];
+        auto w_char = aStr2Invert[j];
         aStr2Invert[j] = aStr2Invert[i];
         aStr2Invert[i] = w_char;
     }
@@ -74,9 +79,9 @@ void invertStr(char *aStr2Invert)
 
 void testInvertStringChar()
 {
-    //char *w_charPtr = "jeanb";                 when i do this, i just set a pointer to string
-                                              // problem we have a pointer to a string and not a
-                                              // not a string which is an array of char (iterable)
+    // char *w_charPtr = "jeanb"; when i do this, i just set a pointer to string
+    //  problem we have a pointer to a string and not a
+    //  not a string which is an array of char (iterable)
     char *w_charAlloc = new char[6]{"jeanb"}; // we have an array of char (string)
     invertStr(w_charAlloc);
     std::cout << "Test inverting a char pointer with allocated is: " << w_charAlloc << "\n";
@@ -193,6 +198,37 @@ bool has4( int x4, int digit2Cmp)
 
 int main()
 {
+    //return a temporary, then deduce plain type
+    decltype(auto) w_checkType = myFuncRetVal();
+    vs15::Classvs15 w_tp2mv; // lvalue
+    // return move, deduce rvalue reference
+    decltype(auto) w_mvType = std::move(w_checkType);
+    // lvalue initialization
+    vs15::Classvs15 w_tp2init=w_tp2mv; // lvalue init
+    // deduce plain type (name)
+    decltype(auto) w_whatyp = w_tp2init;
+    // Automatic Template Argument Type Deduction (f(T&& aType)) 
+    // auto decay, cannot deduce a reference
+    auto w_chkAuto = std::move(w_whatyp); // deduce plain type
+    auto&& w_autRefTest =  myFuncRetVal();
+    auto&& w_again = w_chkAuto;
+    auto&& w_lval = std::move(w_chkAuto);
+
+    cpp17::testStdFilesystem();
+    
+    using namespace std::literals;
+    std::variant<int,float,std::string> w_jeanVariant{"jean"s};
+    auto idx0 = w_jeanVariant.index(); // shall return 3
+    auto chk = std::get<1>(w_jeanVariant);
+    auto ckStr = std::get<std::string>(w_jeanVariant);
+    w_jeanVariant = 3.234f; // float is the alternative
+    // shall return 1
+    std::cout << "Variant current index or alternative is " << w_jeanVariant.index() << '\n'; 
+    assert(std::holds_alternative<float>(w_jeanVariant)); // shall be true
+ 
+    // UTF8 support since C++20
+    std::u8string w_check{};
+
     std::cout << "Starting test of new version of scalarField\n";
     SfxType::testValArrField1D();
     std::cout << "End test of new version scalarField\n";
@@ -213,7 +249,7 @@ int main()
      // when instantiate derived class
      vs11::TestClass w_defCtorCall;
 
-     // 
+     // ...
      vs11::findDuplicateTest();
 
     // auto is pointer type? yes it does!!

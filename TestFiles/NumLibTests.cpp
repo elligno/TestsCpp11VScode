@@ -6,7 +6,7 @@
 #include <boost/range/iterator_range.hpp>    // range iterator lib 
 #include "../Classes/valarrField.h"
 // Numeric library includes
-#include "jb_scalarField.h" // include grid lattice
+#include "SfxNum_scalarField.h" // include grid lattice
 //#include "Elgo_Ptr.hpp"  in house smart pointer impl
 #include "PhysCte.h" // some physical constant
 
@@ -41,7 +41,7 @@ namespace SfxType
 
         // Base numerical library type
         std::cout << "Test linking with BaseNumTypes library\n";
-        const double test = basenum::PhysicalConstant::sGravity;
+        const double test = SfxNum::PhysicalConstant::sGravity;
         std::cout << "Gravity value is: " << test << "\n";
 
         // create a grid with E. McNeil discretization (dx=0.1, x0=0, xN=10)
@@ -114,14 +114,16 @@ namespace SfxType
      //   delete[] myRealArray;
 #if 1        
         using gridLatticePtr = std::shared_ptr<SfxNum::gridLattice>;
-        gridLatticePtr w_gridTest { new SfxNum::gridLattice{}}; // two dimensional grid as default
+        gridLatticePtr w_gridTest { new SfxNum::gridLattice{std::string{"d=1 [0,1] [1,100]"}}}; // two dimensional grid as default
         auto w_scalarfieldPtr = 
-             std::make_shared<SfxNum::scalarField>( gridLatticePtr { new SfxNum::gridLattice{}}, std::string("myScalar"));
+             std::make_shared<SfxNum::scalarField>( 
+                gridLatticePtr { new SfxNum::gridLattice{std::string{"d=1 [0,1] [1,100]"}}}, 
+             std::string("myScalar"));
 
         // copy construct test and check shared_ptr
        // SfxNum::scalarField w_Ufield{ gridLatticePtr{}, std::string("U Field")}; 
-        SfxNum::scalarField w_Ucpy = *w_U1; // check count of shared_ptr for grid and values (default copy ctor)
-        *w_scalarfieldPtr = w_Ucpy; // assignment ctor
+     //   SfxNum::scalarField w_Ucpy = *w_U1;  check count of shared_ptr for grid and values (default copy ctor)
+     //   *w_scalarfieldPtr = w_Ucpy; // assignment ctor
         auto w_nbGridVal = w_scalarfieldPtr->values().size(); // shall be equal to 10
         auto w_checkType = w_scalarfieldPtr->values(); // return a ref to RealNumArray&
         w_checkType(1) = 1.; // auto type deduction

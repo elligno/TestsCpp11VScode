@@ -168,8 +168,12 @@ namespace aa
 	bool TestAccess::hasInterface() const
 	{
 		// check for supported interface
-		using dist = std::iterator_traits<std::list<std::string>::iterator>::difference_type;
-		dist w_distInterface = std::distance( m_listofinterfaces.cbegin(), m_listofinterfaces.cend());
+		//using dist = std::iterator_traits<std::list<std::string>::iterator>::difference_type;
+		//using dist = std::iter_diff_t<std::list<std::string>::iterator>;
+		
+        // Modern C++20
+		using dist = std::iter_difference_t<std::list<std::string>::iterator>;
+		dist w_distInterface = std::ranges::distance( m_listofinterfaces);
 		if (w_distInterface == 0)
 		{
 			return false;
@@ -207,6 +211,5 @@ namespace aa
 		else
 			return NULL;
 	}
-
 } // End of namespace
 

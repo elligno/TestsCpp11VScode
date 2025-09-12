@@ -3,7 +3,7 @@
 // C++ include
 #include <memory> // smart pointer
 // Numeric library includes
-#include "jb_scalarField.h" // include grid lattice#include "valarrField.h"
+#include "SfxNum_scalarField.h" // include grid lattice#include "valarrField.h"
 
 namespace SfxType 
 {
@@ -29,14 +29,14 @@ namespace SfxType
 		  *
 		  * @return aOther vector to initialize from
 		  */
-		 vectorField( const vectorField& aOther) = default;
+		// vectorField( const vectorField& aOther) = default;
 
 		 /**
 		  * @brief assigment ctor
 		  * 
 		  * @return aOther vector to initialize from
 		  */
-		 vectorField& operator= ( const vectorField& aOther)=default;
+	//	 vectorField& operator= ( const vectorField& aOther)=default;
 
 	    /**
 	     * @brief Construct a new jb vectorField object
@@ -60,14 +60,19 @@ namespace SfxType
          * 
          * @param aName string representation of the vector field
          */
-		vectorField( vectorField&& aOther)
-	    : m_name{ std::move(aOther.m_name)},
-		  m_U1{ std::move(aOther.m_U1)},
-		  m_U2{ std::move(aOther.m_U2)}
-		  {
-			  std::cout << "vectorField copy move ctor\n";
-		  }
+		// vectorField( vectorField&& aOther)
+	    // : m_name{ std::move(aOther.m_name)},
+		//   m_U1{ std::move(aOther.m_U1)},
+		//   m_U2{ std::move(aOther.m_U2)}
+		//   {
+		// 	  std::cout << "vectorField copy move ctor\n";
+		//   }
 
+		// NOTE don't need to define a move ctor, if scalar field 
+		// is moveable it will apply to every member of the field.
+		// scalar field has no copy ctor, but Copy Elison is mandatory
+		// since C++17 (problem move ctor is user defined, which shouldn't be)
+		// Check VS2022 project NumTypes library and do more tests!!!
         // move semantic ctor??
 
 		/**
@@ -82,8 +87,13 @@ namespace SfxType
 		 * 
 		 * @return std::shared_ptr<SfxNum::scalarField
 		 */
-        SfxNum::scalarField getU1() const { return *m_U1; }
-		SfxNum::scalarField getU2() const { return *m_U2; }
+        const SfxNum::scalarField& getU1() const { return *m_U1; }
+		// doesn't compile because dereference to get the scalar field
+		//  and since return by copy it moves??? maybe but not sure!! 
+		// message: cannot be dreferenced because it is a deleted function.
+		//SfxNum::scalarField getU2() const { return *m_U2; }
+		
+		//std::shared_ptr<SfxNum::scalarField> getU1shr() const {return m_U1;}
 
        // not sure about these methods
 		// startIndex()

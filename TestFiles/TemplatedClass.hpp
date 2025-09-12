@@ -1,7 +1,7 @@
 #pragma once 
 
 // C++ includes
-  #include <iostream>
+#include <iostream>
 #include <mutex>
 #include <fstream>
 
@@ -9,7 +9,7 @@ namespace vs11
 {
     std::mutex logMutex;
 
-    template<class T, class ... Args>
+    template<typename T, typename... Args>
     void fun( const T& first, const Args& ... rest)
     {
         std::cout << "Implementing variadic template\n";
