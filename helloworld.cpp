@@ -214,6 +214,9 @@ int main()
     auto&& w_again = w_chkAuto;
     auto&& w_lval = std::move(w_chkAuto);
 
+    std::valarray<int> w_val(5);
+    decltype(auto) w_jj = w_val[0]; // lvalue reference
+
     cpp17::testStdFilesystem();
     
     using namespace std::literals;
