@@ -3,7 +3,7 @@
 #include <utility>
 #include <tuple>
 // boost include
-#include <boost/filesystem.hpp>      // boost file system utility
+#include <filesystem>      // std file system utility
 // Testcpp include
 #include "LoggerUtil.h"
 
@@ -86,7 +86,7 @@ namespace testSfx
 		// By default if we don't set any thing, where file is saved?
 
 		// set namespace for clarity
-		namespace bfs = boost::filesystem;
+		namespace bfs = std::filesystem;
 		bfs::path w_currentPath;
 		w_currentPath = bfs::current_path();
 		m_filePath = w_currentPath.string();
@@ -145,7 +145,7 @@ namespace testSfx
 	void LoggerUtil::setWorkingDir( const std::string aDefaultLoc)
 	{
 		// set namespace for clarity
-		namespace bfs = boost::filesystem;
+		namespace bfs = std::filesystem;
 
 		// retrieve current directory
 		bfs::path w_currentPath;
@@ -161,7 +161,7 @@ namespace testSfx
 
 		try  
 		{  
-			if( boost::filesystem::exists(w_dir))  
+			if( std::filesystem::exists(w_dir))  
 			{  
 				std::cerr << "Destination directory "   
 					<< w_dir.string()  
@@ -170,14 +170,14 @@ namespace testSfx
 			}  
 
 			// Create the destination directory  
-			if( !boost::filesystem::create_directory(w_dir))  
+			if( !std::filesystem::create_directory(w_dir))  
 			{  
 				std::cerr << "Unable to create destination directory"  
 					<< w_dir.string() << '\n';  
 		//		return false;  
 			}  
 		}  // try 
-		catch( boost::filesystem::filesystem_error const & e)  
+		catch( std::filesystem::filesystem_error const & e)  
 		{  
 			std::cerr << e.what() << '\n';  
 			//return false;  
@@ -190,8 +190,8 @@ namespace testSfx
 		try  
 		{  
 			// Check whether the function call is valid  
-			if( !boost::filesystem::exists(aDefLoc) ||  
-				!boost::filesystem::is_directory(aDefLoc))  
+			if( !std::filesystem::exists(aDefLoc) ||  
+				!std::filesystem::is_directory(aDefLoc))  
 			{  
 				std::cerr << "Source directory "   
 					<< aDefLoc.c_str()
@@ -200,13 +200,12 @@ namespace testSfx
 				ret=false;  
 			}  
 		}  // try 
-		catch( boost::filesystem::filesystem_error const & e)  
+		catch( std::filesystem::filesystem_error const & e)  
 		{  
 			std::cerr << e.what() << '\n';  
 			ret = false;  
 		} 
 		return ret;
 	}
-
 } // End of namespace
 

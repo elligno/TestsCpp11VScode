@@ -1,9 +1,7 @@
 
-//   Author: Jean Belanger 
-//   Date of creation: February 22, 2012
+#pragma once
 
-#ifndef btlboard_H
-#define btlboard_H
+#include <list>
 
 // App. include
 #include "Btl_Moveable.h"
@@ -61,4 +59,3 @@ namespace Btl
 		}
 	};
 } // End of namespace
-#endif // Include guard

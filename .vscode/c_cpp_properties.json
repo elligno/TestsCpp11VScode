@@ -22,14 +22,15 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
-                "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/atlmfc/include/*",
-                "C:/Program Files (x86)/Windows Kits/8.1/Include/um",
-                "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
-                "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10150.0/ucrt",
-                "C:/Boost/boost_1_60_0/",
-                "C:/JeansTests/TestVS2015/ProjectsVS15/BaseNumTypes/",
+                "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/MSVC/14.29.30133/include/*",
+                "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/MSVC/14.29.30133/atlmfc/include/*",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/winrt",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt",
+                "E:/boost/boost_1_82_0/",
+                "E:/JeanProjects/JeanSlnVS19/BaseNumericalTypes",
+                "E:/JeanProjects/JeanSlnVS19/SfxBase19/",
                 "${workspaceFolder}/**"
             ],
             "defines": [
@@ -38,22 +39,26 @@
                 "UNICODE"
             ],
             "intelliSenseMode": "msvc-x64",
+            
             "browse": {
                 "path": [
-                    "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
-                    "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/atlmfc/include/*",
-                    "C:/Program Files (x86)/Windows Kits/8.1/Include/um",
-                    "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
-                    "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
-                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10150.0/ucrt",
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/MSVC/14.29.30133/include/*",
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/MSVC/14.29.30133/atlmfc/include/*",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/winrt",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt",
                     "${workspaceFolder}**",
-                    "C:/Boost/boost_1_60_0/**"
+                    "E:/boost/boost_1_82_0/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++20",
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "cl.exe",           
+            "mergeConfigurations": false
         }
     ],
     "version": 4

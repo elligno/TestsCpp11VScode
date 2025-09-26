@@ -1,4 +1,4 @@
-
+#include <cassert>
 // C++ includes
 #include <string>
 #include <iostream>
@@ -6,15 +6,22 @@
 #include <valarray> // numerical array (efficiency)
 #include <array>
 #include <set>
+#include <type_traits>
+#include <numeric>
+
+// C++17
+#include <variant> // testing new feature
 
 // boost includes
-#include <boost/cast.hpp>
+//#include <boost/cast.hpp>
 // test include
 #include "Classes/Class2Test.h"
 #include "Classes/myMoveClass.h"
 #include "Classes/myStringClass.h"
 #include "Classes/ClassVS15.h"
+#include "Classes/myClass.h"
 //#include "Classes/TmxString.h"
+#include "Btl_PrintUtils.hpp" // print utility
 
 // declaring some global function or variables
 namespace vs11
@@ -38,14 +45,20 @@ namespace cpp11
 {
     vs15::MoveTest checkSomeNvFeatures();
     void testSmartPointer();
+    void testShrPtrOwnerShip();
 }//cpp11
 
 namespace SfxType 
 {
     void testScalarField(); 
+    void testValArrField1D();
 }//SfxType
 
 namespace vs15 { int maxProfit( int price[], int start, int end);}
+
+namespace cpp17 {void testStdFilesystem();}
+
+namespace Btl {void convert2EasyRead(int aNumber);}
 
 // signature should be char s[]??
 // because strlen(char*) is it the same as strlen(s[])?
@@ -61,7 +74,7 @@ void invertStr(char *aStr2Invert)
     // of the null terminated character for C string
     for (size_t i = 0, j = ::strlen(aStr2Invert) - 1; i < j; ++i, --j)
     {
-        int w_char = aStr2Invert[j];
+        auto w_char = aStr2Invert[j];
         aStr2Invert[j] = aStr2Invert[i];
         aStr2Invert[i] = w_char;
     }
@@ -71,9 +84,9 @@ void invertStr(char *aStr2Invert)
 
 void testInvertStringChar()
 {
-    char *w_charPtr = "jeanb";                // when i do this, i just set a pointer to string
-                                              // problem we have a pointer to a string and not a
-                                              // not a string which is an array of char (iterable)
+    // char *w_charPtr = "jeanb"; when i do this, i just set a pointer to string
+    //  problem we have a pointer to a string and not a
+    //  not a string which is an array of char (iterable)
     char *w_charAlloc = new char[6]{"jeanb"}; // we have an array of char (string)
     invertStr(w_charAlloc);
     std::cout << "Test inverting a char pointer with allocated is: " << w_charAlloc << "\n";
@@ -182,6 +195,38 @@ bool has4( int x4, int digit2Cmp)
   return false;
 }
 
+// tuple is the same as std::pair,
+typedef std::tuple<unsigned /*N*/, double /*X*/, double /*X^2*/> statsVar;
+
+// An example to compute statistics
+statsVar computeStats(statsVar aVar, double aXi)
+{
+    ++std::get<0>(aVar);      // count the number of entry
+    std::get<1>(aVar) += aXi; // add value ()
+    std::get<2>(aVar) += aXi * aXi;
+
+    // return the statics compilation
+    return aVar;
+}
+
+// ...
+void testStatistics()
+{
+    using namespace std;
+    // using namespace boost::assign; // bring 'operator+=()' into scope
+    //  create a vector of data to compute statistics
+    std::vector<double> w_dataStats{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.};
+    // w_dataStats.reserve(10);
+    //  initialize the vector (Boost assign library)
+    // w_dataStats+=1.,2.,3.,4.,5.,6.,7.,8.,9.,10.; // push_back like initialization
+    //  compute the statistics (average)
+    statsVar res = std::accumulate( w_dataStats.begin(), w_dataStats.end(), // range of values
+                                    std::make_tuple(0u, 0., 0.) /*initialization*/, computeStats /*function*/);
+    // print the statistics that we have computed
+    cout << "Number of elements is: " << std::get<0>(res) << endl;
+    cout << "Average computed is:   " << std::get<1>(res) / get<0>(res) << endl;
+}
+
 // =======================================================
 //
 //               Windows main entry point
@@ -190,7 +235,53 @@ bool has4( int x4, int digit2Cmp)
 
 int main()
 {
-    #if 0
+    // 5 digits
+    Btl::convert2EasyRead(52458);
+
+    //return a temporary, then deduce plain type
+    decltype(auto) w_checkType = myFuncRetVal();
+   // auto tst = std::is_same_v<decltype(w_checkType),vs15::Classvs15>;
+    static_assert( std::is_same_v<decltype(w_checkType),vs15::Classvs15>);
+    vs15::Classvs15 w_tp2mv; // lvalue
+    // return move, deduce rvalue reference
+    decltype(auto) w_mvType = std::move(w_checkType);
+    static_assert(std::is_rvalue_reference_v<decltype(w_mvType)>);
+    // lvalue initialization
+    vs15::Classvs15 w_tp2init=w_tp2mv; // lvalue init
+    // deduce plain type (name)
+    decltype(auto) w_whatyp = w_tp2init;
+    std::valarray<int> w_val(5);
+    // initialized with lvalue expression, deduce lvalue reference
+    decltype(auto) w_jj = w_val[0]; 
+
+    // Automatic Template Argument Type Deduction (f(T&& aType))
+    // auto decay, cannot deduce a reference
+    auto w_chkAuto = std::move(w_whatyp); // deduce plain type
+    auto&& w_autRefTest =  myFuncRetVal();
+    auto&& w_again = w_chkAuto;
+    auto&& w_lval = std::move(w_chkAuto);
+
+    // C++17 file system
+    cpp17::testStdFilesystem();
+    
+    using namespace std::literals;
+    std::variant<int,float,std::string> w_jeanVariant{"jean"s};
+    auto idx0 = w_jeanVariant.index(); // shall return 3
+    auto chk = std::get<1>(w_jeanVariant);
+    auto ckStr = std::get<std::string>(w_jeanVariant);
+    w_jeanVariant = 3.234f; // float is the alternative
+    // shall return 1
+    std::cout << "Variant current index or alternative is " << w_jeanVariant.index() << '\n'; 
+    assert(std::holds_alternative<float>(w_jeanVariant)); // shall be true
+ 
+    // UTF8 support since C++20
+    std::u8string w_check{};
+
+    std::cout << "Starting test of new version of scalarField\n";
+    SfxType::testValArrField1D();
+    std::cout << "End test of new version scalarField\n";
+
+ #if 0
     std::array<int,10> w_arr1 { 1,2,3,3,4,7,1,4,5,6};
     std::array<int,10> w_arr2 { 1,2,3,4,3,2,7,7,8,9};
 
@@ -201,7 +292,12 @@ int main()
     std::set_intersection( w_sortedRng1.cbegin(), w_sortedRng1.cend(),
      w_sortedRng2.cbegin(), w_sortedRng2.cend(), std::back_inserter(w_vecRes));
 #endif
-     // 
+
+     // just test if default ctor of bzase class is call 
+     // when instantiate derived class
+     vs11::TestClass w_defCtorCall;
+
+     // ...
      vs11::findDuplicateTest();
 
     // auto is pointer type? yes it does!!
@@ -215,18 +311,21 @@ int main()
     // the move ctor is called but it needs to exist (below casess with temporaries).
     myFuncByVal( vs15::Classvs15 {});            // use temporary to initalize param
     vs15::Classvs15 w_checkRet = myFuncRetVal(); // use returned temporary to initialize w_chekRet
-    myFuncByVal( std::move(myFuncRetVal()));                 // use returned temporary to initialize param
+    myFuncByVal( std::move(myFuncRetVal()));     // use returned temporary to initialize param
 
     vs15::Classvs15 w_mvClazz = std::move(w_checkRet);
 #endif
 
     auto w_fruitRet = getFruitVite(4);
+
     // create a vector of 5 elements initiated to 0
     std::vector<double> w_vec(5);
    // const auto w_siz = w_vec.size(); error about initalization of const w_siz 
     w_vec.push_back(2);
     assert( 6 == w_vec.size());
-    
+    // check static assert call and other generic stuff
+    Btl::printRange(w_vec); // deduce type from arg
+
     // brace initialization vector of one element set to 5? is that true?
     // it sure is!! vector of size 1 with value 5
     std::vector<double> w_braceVec {5};

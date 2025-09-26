@@ -119,7 +119,7 @@ namespace vs11
          * @param y 
          * @return Array 
          */
-        friend auto operator+(const Array &x, const Array &y) -> Array // adding two vectors
+        friend auto operator+ (const Array &x, const Array &y) -> Array // adding two vectors
         {
             int n = x.m_size;
             Array z(n);

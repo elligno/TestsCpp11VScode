@@ -1,10 +1,5 @@
 
-//  Author: Jean Belanger 
-//  Date of creation: February 22, 2012
-//  
-
-#ifndef btlsqrt_H
-#define btlsqrt_H
+#pragma once
 
 namespace Btl 
 {
@@ -45,4 +40,3 @@ namespace Btl
 		enum {result=M};
 	};
 } // End of namespace
-#endif // Include guard

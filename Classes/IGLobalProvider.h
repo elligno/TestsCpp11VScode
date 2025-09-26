@@ -1,6 +1,4 @@
-
-#ifndef iglobalprovider_H
-#define iglobalprovider_H
+#pragma once
 
 #include <string>
 
@@ -22,4 +20,3 @@ namespace tst
     static IGlobalPRovider* m_sprovider;
   };
 } // End of namespace
-#endif // !iglobalprovider_H

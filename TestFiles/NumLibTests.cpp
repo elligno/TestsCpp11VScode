@@ -4,10 +4,12 @@
 #include <iostream>
 // boost range iterator library includes
 #include <boost/range/iterator_range.hpp>    // range iterator lib 
+#include "../Classes/valarrField.h"
 // Numeric library includes
-#include "jb_scalarField.h" // include grid lattice
-#include "Elgo_Ptr.hpp" // in house smart pointer impl
-#include "PhysCte.h" // some physical constant
+#include "Sfx/Sfx_scalarField.h" // include grid lattice
+#include "Sfx/Sfx_FieldLattice.h"
+//#include "Elgo_Ptr.hpp"  in house smart pointer impl
+#include "include/Sfx_UniversalConstants.h"  //some physical constant
 
 namespace SfxType 
 {
@@ -18,12 +20,12 @@ namespace SfxType
     // we will steal existing data from temporary objects instead of making 
     // useless clones. Don't copy, just move, because moving is always cheaper.
     // just testing the return value construct (move semantic)
-    SfxNum::scalarField getScalarField()
+    Sfx::FieldLattice getScalarField()
     {
-        // return by value
-        return SfxNum::scalarField{ std::shared_ptr<SfxNum::gridLattice> {}, std::string {}};
+        // return by value RVO()
+        // don't make sense since grid return nothing
+        return Sfx::FieldLattice{  std::string {}, std::shared_ptr<Sfx::GridLattice> {}};
     }
-
     /**
      * @brief Some tests numerical library types. 
      *  I've been using these types for many years 
@@ -40,15 +42,15 @@ namespace SfxType
 
         // Base numerical library type
         std::cout << "Test linking with BaseNumTypes library\n";
-        const double test = basenum::PhysicalConstant::sGravity;
+        const auto test = Sfx::cGravity<float64>;
         std::cout << "Gravity value is: " << test << "\n";
-
+#if 0
         // create a grid with E. McNeil discretization (dx=0.1, x0=0, xN=10)
         // Node index from i=1,..,10 mean dx=0.1
         // using auto keyword to keep simple notation and easier to read
         // 10 grid nodes from i= 1,...,10 and x = 0.,...,1. result dx=0.1
         auto w_grid = // E McNeil discretization as default (construct from string)
-            std::make_shared<SfxNum::gridLattice>( std::string( "d=1 [0,1] [1:10]"));
+            std::make_shared<Sfx::GridLattice>( std::string( "d=1 [0,1] [1:10]"));
 
         // checking some values (x=0.)
         const auto checkXmin = w_grid->xMin(1); //one dimensional
@@ -58,7 +60,7 @@ namespace SfxType
         assert( 0.1 == w_dx);
 
         // create a scalar field for testing our VSCode environment
-        std::shared_ptr<SfxNum::scalarField> w_U1 { new SfxNum::scalarField{ w_grid, std::string("A")}};
+        std::shared_ptr<Sfx::FieldLattice> w_U1 { new Sfx::FieldLattice{ std::string("A"), w_grid}};
         const std::string w_fieldName = w_U1->name();
         if( !w_fieldName.empty())
         {
@@ -68,7 +70,7 @@ namespace SfxType
         auto w_nbPtsTotal = w_grid->getNoPoints();
         assert( 10 == w_nbPtsTotal);
 
-        double* myRealArray = new double[w_nbPtsTotal] {}; // initalization to zero (call default ctor)
+        auto myRealArray = new double[w_nbPtsTotal] {}; // initalization to zero (call default ctor)
         // sanity check about iniitialization
         assert( 0. == myRealArray[0]);
         assert( 0. == myRealArray[1]);
@@ -76,8 +78,7 @@ namespace SfxType
 
         // create a real array to initialize the scalarField
         // Reminder: numerical array indexing element from 1,..,N
-       SfxNum::RealNumArray<double>* w_realArray = 
-           new SfxNum::RealNumArray<double> { w_nbPtsTotal, myRealArray};
+       auto w_realArray = new Sfx::NumArray<float64> { w_nbPtsTotal, myRealArray};
         
         // set scalar field data 
         w_U1->values(*w_realArray); // takes the ownership
@@ -85,7 +86,7 @@ namespace SfxType
         // call two-dimensional array indexing (i,j)
         // but here we consider the one-dimensional case
         std::cout << w_realArray << "\n"; // just a check
-#if 0         
+//#if 0         
         // method added to print values in the one-dimensinal case
         w_realArray.print1D(std::cout); // bug: print N-1 element
         std::cout << "Size of the array is: " << w_realArray.size() << "\n";
@@ -111,30 +112,79 @@ namespace SfxType
 #endif
         // do some clean-up avoid leak
      //   delete[] myRealArray;
-#if 1        
-        using gridLatticePtr = std::shared_ptr<SfxNum::gridLattice>;
-        gridLatticePtr w_gridTest { new SfxNum::gridLattice{}}; // two dimensional grid as default
+#if 0       
+        using gridLatticePtr = std::shared_ptr<Sfx::GridLattice>;
+         // two dimensional grid as default
+        gridLatticePtr w_gridTest { new Sfx::GridLattice{Sfx::DIM::value,0.,1.}};
         auto w_scalarfieldPtr = 
-             std::make_shared<SfxNum::scalarField>( gridLatticePtr { new SfxNum::gridLattice{}}, std::string("myScalar"));
+             std::make_shared<Sfx::FieldLattice>( std::string{"myScalar"},
+                gridLatticePtr { new Sfx::GridLattice{Sfx::DIM::value,0.,1.}}
+             );
 
         // copy construct test and check shared_ptr
        // SfxNum::scalarField w_Ufield{ gridLatticePtr{}, std::string("U Field")}; 
-        SfxNum::scalarField w_Ucpy = *w_U1; // check count of shared_ptr for grid and values (default copy ctor)
-        *w_scalarfieldPtr = w_Ucpy; // assignment ctor
+     //   SfxNum::scalarField w_Ucpy = *w_U1;  check count of shared_ptr for grid and values (default copy ctor)
+     //   *w_scalarfieldPtr = w_Ucpy; // assignment ctor
         auto w_nbGridVal = w_scalarfieldPtr->values().size(); // shall be equal to 10
         auto w_checkType = w_scalarfieldPtr->values(); // return a ref to RealNumArray&
         w_checkType(1) = 1.; // auto type deduction
-        auto w_nbDim = w_scalarfieldPtr->values().getDimenions();
+        auto w_nbDim = w_scalarfieldPtr->grid().getNoSpaceDim();
 
         std::cout << "Array values are: "; 
-        w_checkType.print1D( std::cout);
+        std::cout << w_checkType << "\n";
+        //w_checkType.print1D( std::cout);
 
         // initalize smart pointer empty  
-        std::shared_ptr<SfxNum::scalarField> w_scalarFptr {nullptr}; //direct list initalization
-        auto w_nbCount = w_scalarFptr.unique(); //use_count == 1 
-        w_scalarFptr.reset( new SfxNum::scalarField { w_gridTest, std::string("Test smart")});
+        std::shared_ptr<Sfx::FieldLattice> w_scalarFptr {nullptr}; //direct list initalization
+        auto w_nbCount = w_scalarFptr.use_count(); //use_count == 1 
+        w_scalarFptr.reset( new Sfx::FieldLattice { std::string("Test smart"), w_gridTest});
         w_scalarFptr = w_U1; // assignment smart pointer (copy scalarField)
 #endif
         std::cout << "Leaving test numerical stuff\n";
+    }
+    //
+    // =====================================================================================
+    //
+    void testValArrField1D()
+    {
+        std::cout << "Starting to test the valarray version of filed lattice\n";
+
+        // create a grid Node index from i=1,..,10 mean dx=0.1
+        // 10 grid nodes from i= 1,...,10 and x = 0.,...,1. result dx=0.1
+        auto w_grid = std::make_shared<vs11::gridLattice1D>( std::string{"d=1 [0,1] [1:10]"});
+
+       std::cout << *w_grid << "\n";
+
+       // checking some values (x=0.)
+        const auto checkXmin = w_grid->xMin(); //one dimensional
+        auto checkXmax = w_grid->xMax();       //no need
+        const auto w_dx = w_grid->Delta();
+        const auto w_baseIdx = w_grid->getBase(); // first dimension
+        assert( 0.1 == w_dx);
+  
+        std::cout << "Eing to test the valarray version of filed lattice\n";
+
+        // create a scalar field for testing our VSCode environment
+        std::shared_ptr<vs11::valarrField> w_U1 { new vs11::valarrField{ w_grid, std::string("A")}};
+        const auto w_fieldName = w_U1->name();
+        if( !w_fieldName.empty())
+        {
+            std::cout << "Field name is : " << w_fieldName << "\n";
+        }
+        vs11::valarrField w_u1{w_grid, std::string{"u1-field"}};
+        vs11::valarrField w_u2{w_grid, std::string{"u2-field"}};
+        auto& w_somVal = w_u2.values();
+        w_somVal[0]=1.2;
+        w_somVal[1]=0.2;
+        w_somVal[2]=2.5;
+        w_somVal[3]=1.32;
+        w_somVal[4]=1.2;
+        vs11::valarrField w_sum = w_u1+w_u2;
+        const auto& w_values = w_sum.values();
+        assert(10==w_values.size()); 
+
+        vs11::valarrField w_u3 {std::move(w_u2)};
+        auto w_u2siz = w_u2.values().size();
+        std::cout << "End testing\n";
     }
 } // End of namespace

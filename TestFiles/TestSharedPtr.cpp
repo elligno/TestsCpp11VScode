@@ -23,7 +23,7 @@ namespace cpp11
 	// under construction!!!
 	struct testpairshr 
 	{
-		typedef std::shared_ptr<TestShrPtr> shrptr2type;
+		using shrptr2type = std::shared_ptr<TestShrPtr>;
 		std::pair<shrptr2type,shrptr2type> m_pairint;
 
 		// some method!! 
@@ -181,7 +181,53 @@ namespace cpp11
 	  // the array will be correctly deallocated. Can we access element with operator []?
       std::unique_ptr<int[]> arr( new int[1]);
 	  arr[0] = 1; // use in the derivative library (finite difference) 
-      std::shared_ptr<int> ptr( std::move(arr));
+      std::shared_ptr<int[]> ptr( std::move(arr));
 	  // ptr[0]=2; not syupoported before C++17
+  }
+
+  void testShrPtrOwnerShip()
+  {
+	 std::shared_ptr<int> w_shrIntNull{nullptr}; // point to nullptr
+    if( w_shrIntNull!=nullptr)
+    {
+        std::cout << "Something i don't understand\n";
+    }
+    
+    std::shared_ptr<int> w_shrIntVal{new int [3] {1,2,3}};
+    if( w_shrIntVal!=nullptr)
+    {
+        std::cout << "First values is: " << *w_shrIntVal<< "\n";
+      //  std::cout << "Second value is " << *(*(w_shrIntVal))[1] << "";
+    }
+    
+	// IMPORTANT
+	// share ownership with w_shrIntVal, giving up ownership of the object previously owned
+    w_shrIntNull = w_shrIntVal; // reset, or transfer ownership YES it does!!
+    assert( w_shrIntNull.use_count() == w_shrIntVal.use_count());
+
+    if( nullptr!=w_shrIntNull)
+    {
+        std::cout << "Ref count is " << w_shrIntVal.use_count() << "\n";
+        std::cout << "First value of assignment is: " << *(w_shrIntNull.get()) << "\n";
+        auto ptr = w_shrIntVal.get();
+        auto val0 = *ptr++;
+        auto val1 = *ptr++;
+        auto val2 = *ptr;
+
+        std::cout << "Ref count is " << w_shrIntNull.use_count() << "\n";
+
+       if( w_shrIntNull==w_shrIntVal)
+       {
+        auto ptr = w_shrIntNull.get();
+        auto val0 = *ptr++;
+        auto val1 = *ptr++;
+        auto val2 = *ptr;
+       }
+
+       std::shared_ptr<int> w_shrCpy {w_shrIntNull};
+       std::cout << "Ref count is " << w_shrIntNull.use_count() << "\n";
+       std::cout << w_shrCpy << "\n";
+    }
+
   }
 } // End of namespace

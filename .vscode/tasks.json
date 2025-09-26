@@ -11,7 +11,7 @@
         {
             "label": "clean",
             "type": "shell",
-            "command": "./clean.bat obj"
+            "command": "./CleanAll.bat obj"
         }
     ]
 }

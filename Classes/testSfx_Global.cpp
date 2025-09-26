@@ -62,19 +62,22 @@ namespace testSfx
 		// is deleted whatever happens.
 		// NOTE: auto_ptr not anymore supported in the C++11
 		// need to use the unique pointer
-		std::auto_ptr<Type> w_temp(aType);
 
-		if (aType) // check if type is null
+		// just don't get it since we are using a ptr container
+		// takes the ownership of the pointer and delete it
+		std::unique_ptr<Type> w_temp{aType};
+
+		if( aType) // check if type is null
 		{ 
 			// then add it to the container (boost container of pointer)
 			std::cout << "We are just about to add the following type: " << aType->name() << "\n";
-			m_pDictionary.insert( aType->name(),w_temp);
+			m_pDictionary.insert( aType->name(),/*aType*/ std::move(w_temp));
 			std::cout << "Type added successfully\n";
 		}
 	}
 	// ________________________________________________
 	//
-	Type* Global::getType(const std::string& aType2Look)
+	Type* Global::getType( const std::string& aType2Look)
 	{
 		// check if type exist
 		return nullptr; // not found

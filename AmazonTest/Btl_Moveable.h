@@ -1,9 +1,5 @@
 
-//  Author: Jean Belanger 
-//  Date of creation: February 22, 2012 
-
-#ifndef btlmoveable_H
-#define btlmoveable_H
+#pragma once
 
 // stl includes
 #include <vector>
@@ -32,14 +28,16 @@ namespace Btl
 	class Moveable 
 	{
 	public:
+	    friend class Queen;
+
 		// position on the board
 		typedef std::pair<char,int> posonboard;
-		enum eColor
+		enum class eColor
 		{
 			black=0,
 			white=1
 		};
-		enum eType
+		enum class eType
 		{
 			rook=0,
 			knight=1,
@@ -48,8 +46,9 @@ namespace Btl
 			king=4, 
 			pawn=5
 		};
-		Moveable() {}
-		virtual ~Moveable() {}
+
+		Moveable()=default;
+		virtual ~Moveable()=default;
 		// the way piece moves on the board
 		// to be implemented by subclass 
 		virtual void move( const posonboard aPos2move)=0;
@@ -57,7 +56,9 @@ namespace Btl
 		void setPos( posonboard aPos) { m_posOnBoard=aPos;  }
 		posonboard getPos() const    { return m_posOnBoard;}
 		eType getType() const {return m_type;}
+		void setType(eType aType2Set) {m_type=aType2Set;}
 		eColor getColor() const {return m_color;}
+		void setColor(eColor aColor2Set) {m_color=aColor2Set;}
 		const std::deque<posonboard>& getPath() const {return m_path;}
 	protected:
 		eType m_type;
@@ -74,18 +75,18 @@ namespace Btl
 	class Queen : public Moveable 
 	{
 	public:
-		Queen() {}
-		Queen( posonboard aPos, eColor aColor=black) // black as default color
-		: m_posOnBoard(aPos),
-		  m_color(aColor),
-		  m_type(Moveable::queen)
+		Queen()=default;
+		Queen( posonboard aPos, eColor aColor=eColor::black) // black as default color
+		: Moveable{}
 		{
-			// nothing to do
+			setPos(aPos);
+			setColor(aColor);
+			setType(eType::queen);
 		}
 		~Queen() {}
 		// queen moves any number of vacant squares in any direction 
 		// along a row, column, or diagonal.
-		void move( const posonboard aPos2move) {setPos(aPos2move);}
+		void move( const posonboard aPos2move) override final {setPos(aPos2move);}
 		bool operator== (const Queen& aOther) 
 		{
 			return ( m_posOnBoard.first==aOther.m_posOnBoard.first &&
@@ -96,9 +97,6 @@ namespace Btl
 			return ( m_posOnBoard.first==aOther.m_posOnBoard.first &&
 				m_posOnBoard.second==aOther.m_posOnBoard.second);
 		}
-	private:
-		// current position on the board
-		//std::pair<char,int> m_posOnBoard;
 	};
 
 	//
@@ -108,17 +106,17 @@ namespace Btl
 	{
 	public:
 		King() {}
-		King( posonboard aPos, eColor aColor=black) // black as default color
-		: m_posOnBoard(aPos),
-		  m_color(aColor),
-		  m_type(Moveable::king)
+		King( posonboard aPos, eColor aColor=eColor::black) // black as default color
+		: Moveable{}
 		{
-			// nothing to do
+			setPos(aPos);
+			setColor(aColor);
+			setType(eType::queen);
 		}
 		~King() {}
 		// King moves any number of vacant squares in any direction 
 		// along a row, column, or diagonal.
-		void move( const posonboard aPos2move) {setPos(aPos2move);}
+		void move( const posonboard aPos2move) override final {setPos(aPos2move);}
 		bool operator== (const King& aOther) 
 		{
 			return ( m_posOnBoard.first==aOther.m_posOnBoard.first &&
@@ -129,7 +127,6 @@ namespace Btl
 			return ( m_posOnBoard.first==aOther.m_posOnBoard.first &&
 				m_posOnBoard.second==aOther.m_posOnBoard.second);
 		}
-	private:
 	};
 
 	//
@@ -139,18 +136,19 @@ namespace Btl
 	{
 	public:
 		Rook() {}
-		Rook( posonboard aPos, unsigned aID=1, eColor aColor=black) // black as default color
-	    : m_posOnBoard(aPos),
-		  m_ID(aID),
-	      m_color(aColor),
-		  m_type(Moveable::rook)
+		Rook( posonboard aPos, unsigned aID=1, eColor aColor=eColor::black) // black as default color
+	    : Moveable{},
+		  m_ID(aID)
 		{
 			m_path.resize(10);
+			setPos(aPos);
+			setColor(aColor);
+			setType(eType::queen);
 		}
 		~Rook() {}
 		// rook moves any number of vacant squares along rows or columns 
 		// (forward, backward, left or right)
-		void move( const posonboard aPos2move) 
+		void move( const posonboard aPos2move) override final
 		{
 			// current position
 			m_path.push_front(m_posOnBoard);
@@ -177,23 +175,51 @@ namespace Btl
 		// container of position along the path
 		std::deque<posonboard> m_path;
 	};
-	class Bishop : public Moveable {};
-	class Knight : public Moveable {}; 
+
+	class Bishop : public Moveable 
+	{
+		public:
+
+		Bishop( posonboard aPos, eColor aColor=eColor::black) // black as default color
+	    : Moveable{}
+		{
+		//	m_path.resize(10);
+			setPos(aPos);
+			setColor(aColor);
+			setType(eType::queen);
+		}
+ 
+		void move( const posonboard aPos2move) override final {} 
+	};
+	class Knight : public Moveable 
+	{ 
+	    public:
+
+		Knight( posonboard aPos, eColor aColor=eColor::black) // black as default color
+	    : Moveable{}
+		{
+		//	m_path.resize(10);
+			setPos(aPos);
+			setColor(aColor);
+			setType(eType::queen);
+		}
+		void move( const posonboard aPos2move) override final {} 
+	}; 
 	class Pawn   : public Moveable 
 	{
 	public:
 		Pawn() {}
-		Pawn( posonboard aPos, unsigned aID=1, eColor aColor=black) // black as default color
-		: m_posOnBoard(aPos),
-		  m_ID(aID),
-		  m_color(aColor),
-		  m_type(Moveable::pawn)
+		Pawn( posonboard aPos, unsigned aID=1, eColor aColor=eColor::black) // black as default color
+		: Moveable{},
+		  m_ID(aID)
 		{
-			// nothing to do
+			setPos(aPos);
+			setColor(aColor);
+			setType(eType::queen);
 		}
-		~Pawn() {/*nothing to do*/}
-		//
-		void move( const posonboard aPos2move) 
+		//~Pawn() {/*nothing to do*/}
+		
+		void move( const posonboard aPos2move) override final
 		{
 			// forward one space
 		}
@@ -210,4 +236,3 @@ namespace Btl
 		unsigned m_ID; // 1,2,3,4,5,6,7,8
 	};
 } // End of namespace
-#endif // Include guard

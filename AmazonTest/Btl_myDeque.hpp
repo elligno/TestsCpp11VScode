@@ -1,10 +1,5 @@
 
-//  Author: Jean Belanger
-//  Date of creation: February 22, 2012
-//  Revision history:
-
-#ifndef btlmydeuqe_H
-#define btlmydeuqe_H
+#pragma once
 
 // stl includes
 #include <vector>
@@ -150,4 +145,3 @@ namespace Btl
 		}
 	};
 } // End of namespace
-#endif // Include guard

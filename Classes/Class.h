@@ -13,7 +13,7 @@ namespace aa
 	class Class : public Object
 	{
 	public:
-		Class() : Object( std::string("Class")) {} // default ctor
+		Class() : Object() {} // default ctor
 		virtual ~Class() {/*do nothing*/}
 		static Class* forName( const std::string& aName);
 		virtual void* newInstance();  //=0; ?? pure abstract, isn't?

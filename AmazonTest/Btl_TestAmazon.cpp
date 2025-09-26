@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <vector>
 #include <set>
+#include <numeric>  // accumulate
 // App. includes
 #include "Btl_Sqrt.hpp"
 
@@ -65,7 +66,9 @@ namespace Btl
 		{
 			// we found the number
 			std::cout << "The number that we have found is:" << *valueIt << std::endl; 
+			return true;
 		}
+		return false;
 	}
 
 	// Question #5	
@@ -78,6 +81,8 @@ namespace Btl
 		std::cout << "Sqrt<25>::result = " << Btl::Sqrt<25>::result << "\n";
 		std::cout << "Sqrt<42>::result = " << Btl::Sqrt<42>::result << "\n";
 		std::cout << "Sqrt<1>::result  = " << Btl::Sqrt<1>::result << "\n";
+
+		return 0.;
 	}
 
 	// Question #4	
@@ -97,9 +102,9 @@ namespace Btl
 	void printCombinations( int aNsteps)
 	{
 		// fix a range of sequence
-        int w_intNumsteps;
-		int minSeq;
-		int maxSeq;
+        [[maybe_unused]] int w_intNumsteps{};
+		int minSeq{};
+		int maxSeq{};
 		std::vector<int> w_try2Find;
 		w_try2Find.reserve(aNsteps);
 		// start with 3 (1 and 2 are trivial case)

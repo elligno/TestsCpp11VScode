@@ -1,9 +1,8 @@
 
-//  Author: Jean Belanger 
-//  Date of creation: February 23, 2012
+#pragma once
 
-#ifndef btltictactoealgorithm_H
-#define btltictactoealgorithm_H
+#include <iostream>
+#include <vector>>
 
 namespace Btl 
 {
@@ -60,15 +59,15 @@ namespace Btl
 			const Grid::vecofvec& theChars=m_grid->getArr2D();
 			
 			// row iterator
-			vecofvecChar::iterator firstRow = theChars.begin();
-			vecofvecChar::iterator lastRow = theChars.end();
+			auto firstRow = theChars.begin();
+			auto lastRow = theChars.end();
 			std::vector<char> w_rowChar(3);
 			int i(0);
 			while(firstRow!=lastRow)
 			{
 				// beginning of the row
-                std::vector<char>::iterator begRow=(*firstRow).begin();
-				std::vector<char>::iterator endRow=(*firstRow).end();
+                auto begRow=(*firstRow).begin();
+				auto endRow=(*firstRow).end();
 				while (begRow!=endRow)
 				{
 					w_rowChar[i++]=*begRow++;
@@ -85,21 +84,21 @@ namespace Btl
 			}
 		
 			// column iterator
-			typedef std::vector<char>::iterator char_iter;
-			std::vector<char_iter> w_vecolIter(3);
+			typedef std::vector<char>::const_iterator const_char_iter;
+			std::vector<const_char_iter> w_vecolIter(3);
 			// initialization 
-			vecofvecChar::iterator firstR=theChars.begin();
-			for (std::vector<char_iter>::size_type l=0; w_vecolIter.size();++l)
+			auto firstR=theChars.begin();
+			for (std::vector<const_char_iter>::size_type l=0; w_vecolIter.size();++l)
 			{
 				// set first column element 
-				w_vecolIter[l]=(*firstR).begin();
+				w_vecolIter[l] = firstR->begin();
 				++firstR;
 			}
 
 			// sock column elements
 			std::vector<char> w_colElements(3);
 			// loop on column
-			for(std::vector<char_iter>::size_type i=0; i<3;;++i)
+			for(std::vector<const_char_iter>::size_type i=0; i<3;++i)
 			{
 				for (std::vector<char>::size_type k=0;k<w_colElements.size();++k)
 				{
@@ -124,5 +123,4 @@ namespace Btl
 // 		unsigned charOCounter;
 		Grid* m_grid;
 	};
-} // End of namespace
-#endif // Include guard
+ } // End of namespace

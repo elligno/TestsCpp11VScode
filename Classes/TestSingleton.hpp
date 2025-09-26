@@ -37,14 +37,14 @@ namespace aa
 	//
 	template<typename T> inline TestSingleton<T>::TestSingleton()
 	{
-		std::cout << "We are in the TEstSingleton ctor\n"; 
+//		std::cout << "We are in the TEstSingleton ctor\n"; 
 	}
 
 	// _______________________________________________________________________
 	//
 	template<typename T> inline TestSingleton<T>::~TestSingleton()
 	{
-		std::cout << "We are in the TestSingleton dtor\n";
+	//	std::cout << "We are in the TestSingleton dtor\n";
 	}
 
 	// _______________________________________________________________________

@@ -1,14 +1,11 @@
 
-  // Author: Jean Belanger (Elligno Inc.)
-  // Date of creation: January 20, 2011
-  // Revision history:
-
-#ifndef btlprintutils_HPP
-#define btlprintutils_HPP
+ #pragma once
 
 // C++ includes
 #include <utility>
 #include <iostream>
+// C++20 include
+#include <ranges>
 
 namespace Btl
 {
@@ -17,7 +14,7 @@ namespace Btl
 	void printCont( const Cont& aCont2print)
 	{
 		// define a type
-		typename typedef Cont::const_iterator const_iterator;
+		using const_iterator = typename Cont::const_iterator;
 
 		// initialize the iterator
 		const_iterator beg = aCont2print.begin();
@@ -38,14 +35,17 @@ namespace Btl
 
 	// ______________________________________________________________
 	//
-	template<typename Range>
-	void printRange( const Range& aRange)
+	template<typename Rng>
+	void printRange( const Rng& aRange2Print)
 	{
 		std::cout << "We are printing the range\n";
-		typedef boost::range_iterator<Range>::type iter_type;
-		typedef std::iterator_traits<iter_type>::value_type value_type;
-		std::copy( boost::begin(aRange), boost::end(aRange),
-			std::ostream_iterator<value_type>(std::cout,"\n"));
+		
+		// range concept C++20 (sanity check)
+		static_assert(std::ranges::range<Rng>);
+
+		// C++20 range algorithm
+		std::ranges::copy(aRange2Print, // range to print
+						  std::ostream_iterator<std::ranges::range_value_t<Rng>>(std::cout, "\n"));
 	}
 
 	// _______________________________________________________
@@ -58,16 +58,22 @@ namespace Btl
 		// typename because CONT is a argument template 
 		// we have to give an hint to the compiler
 		// container element type
-		typedef typename CONT::value_type ctype;
-		// define an iterator and a const iterator
-		typedef typename CONT::iterator iter_range;
-		typedef typename CONT::const_iterator citer_range;
-		//  initialize range iterators
-		citer_range w_beg = aCont2Print.begin();
-		citer_range w_end = aCont2Print.end();
-		std::copy(w_beg,w_end, 
-			std::ostream_iterator<ctype>(std::cout," "));
+		// typedef typename CONT::value_type ctype;
+		// // define an iterator and a const iterator
+		// typedef typename CONT::iterator iter_range;
+		// typedef typename CONT::const_iterator citer_range;
+
+		// //  initialize range iterators
+		// citer_range w_beg = aCont2Print.begin();
+		// citer_range w_end = aCont2Print.end();
+		// std::copy(w_beg,w_end, 
+		// 	std::ostream_iterator<ctype>(std::cout," "));
+		
+		// C++20 way of doing thing
+		static_assert(std::ranges::range<CONT>); //sanity check
+		// range concept C++20  
+		std::ranges::copy(aCont2Print,
+			std::ostream_iterator<std::ranges::range_value_t<aCont2Print>>(std::cout," "));
 		std::cout << "\n";
 	}
 } // End of namespace
-#endif // Include guard
